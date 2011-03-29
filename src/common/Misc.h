@@ -84,6 +84,22 @@ public:
 		return ss.str();
 	}
 
+	template<class T>
+	static std::string getContainerString(const std::vector<T> & obj) {
+		// forall in obj
+		std::stringstream ss;
+		{
+			typename std::vector<T>::const_iterator it_obj = obj.begin();
+			const typename std::vector<T>::const_iterator it_obj_end = obj.end();
+			while (it_obj != it_obj_end) {
+				ss << " " << *it_obj;
+				//std::cout<<"Misc::printContainer: "<<*it_obj<<std::endl;
+				++it_obj;
+			}
+		}
+		return ss.str();
+	}
+
 	static std::ostream & print (std::ostream & os, const boost::uuids::uuid & id) {
 		std::stringstream ss;
 		// forall in id

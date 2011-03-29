@@ -1,0 +1,4 @@
+2011-03-29  SevenMachines  <SevenMachines@yahoo.co.uk>
+
+	* src/config/ConfigTranslator.h: Class to read in/write out  config files and translate them into collections of ConfigEntry
+	* src/config/ConfigEntry.cpp (ConfigEntry::parseEntry): Create all variables from the raw string entry
