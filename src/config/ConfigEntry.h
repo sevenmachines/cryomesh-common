@@ -28,7 +28,11 @@ public:
 	virtual ~ConfigEntry();
 	std::string getCommand()  const;
 	const std::map<std::string, std::string> & getOptions() const;
-	std::string getRawEntry();
+	std::string getOptionValue(const std::string & key)const;
+	int getIntegerFormattedOptionValue(const std::string & key)const;
+
+	std::map<std::string, int> getIntegerFormattedOptions() const ;
+	std::string getRawEntry() const;
 
 	/**
 		 * To stream operator

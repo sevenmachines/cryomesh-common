@@ -53,7 +53,8 @@ public:
 			const typename std::multimap<U, T>::const_iterator it_mapobj_end = mapobj.end();
 			while (it_mapobj != mapobj.end()) {
 				if (result < 0 && it_mapobj->first < val) {
-					std::cout<<"Containers::deleteByComparison: "<<"Deleting "<< it_mapobj->first<<" ( < "<<val<<")"<<std::endl;
+					std::cout << "Containers::deleteByComparison: " << "Deleting " << it_mapobj->first << " ( < "
+							<< val << ")" << std::endl;
 					mapobj.erase(it_mapobj->first);
 				} else if (result == 0 && it_mapobj->first == val) {
 					mapobj.erase(it_mapobj->first);
@@ -354,6 +355,27 @@ public:
 		Containers::addMerge(newcoll, lhs);
 		return newcoll;
 	}
+
+	/**
+	 * Find item in collection
+	 */
+	template<class U, class T>
+	static typename U::const_iterator find(const U & collection, const T key) {
+		typename U::const_iterator it_found = collection.end();
+		// forall in collection
+		{
+			typename U::const_iterator it_collection = collection.begin();
+			const typename U::const_iterator it_collection_end = collection.end();
+			while (it_collection != it_collection_end && it_found == it_collection_end) {
+				if (key == *it_collection) {
+					it_found = it_collection;
+				}
+				++it_collection;
+			}
+		}
+		return it_found;
+	}
+
 protected:
 
 	/**
