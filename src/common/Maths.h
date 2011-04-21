@@ -9,6 +9,7 @@
 #define MATHS_H_
 
 #include <cstdlib>
+#include <iostream>
 
 namespace cryomesh {
 
@@ -32,15 +33,21 @@ public:
 	 * @param const double delta
 	 * 		comparison delta
 	 *
-	 * @return bool
-	 * 		True if lhs and rhs compare within delta margin, false otherwise
+	 * @return int
+	 * 		>0 is lhs>rhs, <0 is lhs<rhs, 0 otherwise
 	 */
-	static bool compareDoubles(const double lhs, const double rhs, const double delta = 0.00001) {
-		//std::cout<<"Maths::compareDoubles: "<<lhs<<"==" << rhs <<" ~ "<<delta<<std::endl;
-		if ((lhs < rhs - delta) || (lhs < rhs + delta)) {
-			return false;
+	static int compareDoubles(const double lhs, const double rhs, const double delta = 0.00001) {
+		/*std::cout << "Maths::compareDoubles: " << lhs << " > " << rhs << " - " << delta << " = " << (lhs > rhs - delta)
+			<< std::endl;
+			std::cout << "Maths::compareDoubles: " << lhs << " < " << rhs << " + " << delta << " = " << (lhs < rhs + delta)
+				<< std::endl;*/
+
+		if ((lhs > rhs - delta) && (lhs < rhs + delta)) {
+			return 0;
+		}else if (lhs > rhs) {
+			return 1;
 		}
-		return true;
+		else return -1;
 	}
 	static int getRandomInteger(int low, int high) {
 		double temp = 0;
@@ -67,6 +74,15 @@ public:
 	}
 	static bool getRandomBool(double fraction = 0.5) {
 		return getRandomDouble(0, 1) >= 0.5 ? true : false;
+	}
+
+	template <class T>
+	static void clamp(T & val, const T & low, const T & high){
+		if (val < low){
+			val = low;
+		}else if (val>high){
+			val = high;
+		}
 	}
 };
 

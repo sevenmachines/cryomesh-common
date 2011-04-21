@@ -44,7 +44,7 @@ void ConfigTranslator::readRawEntries(std::istream & fs) {
 	std::string line;
 	while (fs.good() == true) {
 		getline(fs, line);
-		std::cout << "readRawEntries: " << line << std::endl;
+		//std::cout << "readRawEntries: " << line << std::endl;
 		// ignore comment lines
 		int first_hash = line.find_first_of('#', 0);
 		int first_char_pos = line.find_first_not_of(' ');

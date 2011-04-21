@@ -247,7 +247,26 @@ public:
 	 * @return boost::shared_ptr<T>
 	 * 		The found object
 	 */
-	boost::shared_ptr<T> getObjectByKey(const U & key) {
+	const boost::shared_ptr<T> getObjectByKey(const U & key) const {
+		boost::shared_ptr<T> tempptr;
+		// forall in objects
+		typename std::map<U, boost::shared_ptr<T> >::const_iterator it_found = objects.find(key);
+		const typename std::map<U, boost::shared_ptr<T> >::const_iterator it_objects_end = objects.end();
+		if (it_found != it_objects_end) {
+			tempptr = it_found->second;
+		}
+		return tempptr;
+	}
+
+	/**
+	 * Get mutable object using key
+	 *
+	 *	@param U key
+	 *		Key to search for
+	 * @return boost::shared_ptr<T>
+	 * 		The found object
+	 */
+	boost::shared_ptr<T> getMutableObjectByKey(const U & key) {
 		boost::shared_ptr<T> tempptr;
 		// forall in objects
 		typename std::map<U, boost::shared_ptr<T> >::const_iterator it_found = objects.find(key);
@@ -281,23 +300,23 @@ public:
 	 * 		The maximum value
 	 */
 	/*
-	boost::shared_ptr< T > getMax()const{
-		std::vector<boost::shared_ptr<T> > all_objs = this->getObjectList();
-		boost::shared_ptr< T > max(new T);
-		// forall in all_objs
-			 {
-				 typename std::vector<boost::shared_ptr<T> >::const_iterator it_all_objs = all_objs.begin();
-				 const  typename std::vector<boost::shared_ptr<T> >::const_iterator it_all_objs_end = all_objs.end();
-				 while ( it_all_objs != it_all_objs_end){
-					 if ( **it_all_objs>*max){
-						 max = *it_all_objs;
-					 }
-					 ++it_all_objs;
-				 }
-			 }
-			 return max;
-	}
-	*/
+	 boost::shared_ptr< T > getMax()const{
+	 std::vector<boost::shared_ptr<T> > all_objs = this->getObjectList();
+	 boost::shared_ptr< T > max(new T);
+	 // forall in all_objs
+	 {
+	 typename std::vector<boost::shared_ptr<T> >::const_iterator it_all_objs = all_objs.begin();
+	 const  typename std::vector<boost::shared_ptr<T> >::const_iterator it_all_objs_end = all_objs.end();
+	 while ( it_all_objs != it_all_objs_end){
+	 if ( **it_all_objs>*max){
+	 max = *it_all_objs;
+	 }
+	 ++it_all_objs;
+	 }
+	 }
+	 return max;
+	 }
+	 */
 	// GETTERS/SETTERS
 
 	/**
@@ -328,6 +347,25 @@ public:
 	 */
 	int getSize() const {
 		return objects.size();
+	}
+
+	// Implement iterator
+
+
+	typename std::map<U, boost::shared_ptr<T> >::iterator begin() {
+		return objects.begin();
+	}
+
+	typename std::map<U, boost::shared_ptr<T> >::const_iterator begin() const {
+		return objects.begin();
+	}
+
+	typename std::map<U, boost::shared_ptr<T> >::iterator end() {
+		return objects.end();
+	}
+
+	typename std::map<U, boost::shared_ptr<T> >::const_iterator end() const {
+		return objects.end();
 	}
 
 protected:
