@@ -88,6 +88,19 @@ public:
 	}
 
 	/**
+	 * Get the short summary of the uuid of object as a string
+	 *
+	 * @return std::string
+	 * 		The short summary uuid tag of this object as a string
+	 */
+	std::string getUUIDSummary() const {
+		std::stringstream ss;
+		ss << (this->getUUID());
+		std::string summary = ss.str().substr(0,8);
+		return summary;
+	}
+
+	/**
 	 * Get the key of object
 	 *
 	 * @return boost::uuids::uuid

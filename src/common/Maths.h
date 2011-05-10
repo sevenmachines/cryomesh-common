@@ -77,12 +77,13 @@ public:
 	}
 
 	template <class T>
-	static void clamp(T & val, const T & low, const T & high){
+	static T clamp(T & val, const T & low, const T & high){
 		if (val < low){
 			val = low;
 		}else if (val>high){
 			val = high;
 		}
+		return val;
 	}
 };
 

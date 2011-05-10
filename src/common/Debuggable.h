@@ -58,6 +58,12 @@ public:
 	void setDebug(bool b) {
 		debug = b;
 	}
+	virtual bool checkConstraints()const{
+			return false;
+		}
+protected:
+
+
 private:
 	/**
 	 * Bool representing debugging on or off

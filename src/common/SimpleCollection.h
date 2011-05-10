@@ -176,6 +176,23 @@ public:
 		}
 	}
 
+	/**
+	 * Set the collection to be a copy of another collection
+	 *
+	 */
+	void setCollection( const std::list<T> & obj_copy){
+		this->objects.clear();
+
+		// forall in obj_copy
+			 {
+				 typename std::list<T>::const_iterator it_obj_copy = obj_copy.begin();
+				 const  typename std::list<T>::const_iterator it_obj_copy_end = obj_copy.end();
+				 while ( it_obj_copy != it_obj_copy_end){
+					 objects.push_back(*it_obj_copy);
+					 ++it_obj_copy;
+				 }
+			 }
+	}
 	/*
 	 * Calculate the sum of all elements
 	 *
@@ -472,15 +489,20 @@ public:
 	 * @return T &
 	 * 		Return the collection
 	 */
-	std::list<T> & pad(int front_pad, int back_pad, T pad_value) {
+	std::list<T> & pad(const  long int front_pad,const long int back_pad, T pad_value) {
 		// check padding is >= 0
-		front_pad = std::max(front_pad, 0);
-		back_pad = std::max(back_pad, 0);
-
-		for (int i = 0; i < front_pad; i++) {
+		long int working_front_pad =0;
+		long int working_back_pad = 0;
+		if (front_pad>0){
+			working_front_pad = front_pad;
+		}
+		if (back_pad>0){
+			working_back_pad = back_pad;
+		}
+		for (unsigned int i = 0; i < working_front_pad; i++) {
 			objects.push_front(pad_value);
 		}
-		for (int i = 0; i < back_pad; i++) {
+		for (unsigned int i = 0; i < working_back_pad; i++) {
 			objects.push_back(pad_value);
 		}
 		return objects;
