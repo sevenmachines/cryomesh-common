@@ -14,6 +14,7 @@
 #include <string>
 #include <map>
 #include <list>
+#include <vector>
 
 namespace cryomesh {
 
@@ -47,6 +48,8 @@ public:
 		 */
 		friend std::ostream& operator<<(std::ostream & os, const ConfigEntry & obj);
 
+		static std::vector<int> toIntegerMultipleValues(const std::vector<std::string> &values);
+		static std::vector<std::string> tokenizeMultipleValueString(const std::string & values) ;
 protected:
 	void parseEntry();
 private:

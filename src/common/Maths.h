@@ -37,17 +37,20 @@ public:
 	 * 		>0 is lhs>rhs, <0 is lhs<rhs, 0 otherwise
 	 */
 	static int compareDoubles(const double lhs, const double rhs, const double delta = 0.00001) {
-		/*std::cout << "Maths::compareDoubles: " << lhs << " > " << rhs << " - " << delta << " = " << (lhs > rhs - delta)
-			<< std::endl;
-			std::cout << "Maths::compareDoubles: " << lhs << " < " << rhs << " + " << delta << " = " << (lhs < rhs + delta)
-				<< std::endl;*/
+		//std::cout << "Maths::compareDoubles: " << lhs << " > " << rhs << " - " << delta << " = " << (lhs > rhs - delta)
+		//		<< std::endl;
+		//std::cout << "Maths::compareDoubles: " << lhs << " < " << rhs << " + " << delta << " = " << (lhs < rhs + delta)
+		//		<< std::endl;
 
 		if ((lhs > rhs - delta) && (lhs < rhs + delta)) {
+			//std::cout << "compareDoubles: " << "(lhs > rhs - delta) && (lhs < rhs + delta)" << std::endl;
 			return 0;
-		}else if (lhs > rhs) {
+		} else if (lhs > rhs) {
+			//	std::cout << "compareDoubles: " << "lhs > rhs" << std::endl;
 			return 1;
-		}
-		else return -1;
+		} else
+			//std::cout << "compareDoubles: " << "lhs < rhs" << std::endl;
+			return -1;
 	}
 	static int getRandomInteger(int low, int high) {
 		double temp = 0;
@@ -76,11 +79,11 @@ public:
 		return getRandomDouble(0, 1) >= 0.5 ? true : false;
 	}
 
-	template <class T>
-	static T clamp(T & val, const T & low, const T & high){
-		if (val < low){
+	template<class T>
+	static T clamp(T & val, const T & low, const T & high) {
+		if (val < low) {
 			val = low;
-		}else if (val>high){
+		} else if (val > high) {
 			val = high;
 		}
 		return val;

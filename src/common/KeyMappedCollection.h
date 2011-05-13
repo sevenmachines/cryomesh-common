@@ -293,6 +293,25 @@ public:
 
 	}
 
+	const boost::shared_ptr<T> getObjectByIndex(int index) const {
+		boost::shared_ptr<T> temp_obj;
+
+		// forall in objects
+		{
+			typename std::map<U, boost::shared_ptr<T> >::const_iterator it_objects = objects.begin();
+			const typename std::map<U, boost::shared_ptr<T> >::const_iterator it_objects_end = objects.end();
+			int count = 0;
+			while (it_objects != it_objects_end && count < index) {
+				++count;
+				++it_objects;
+			}
+			if (it_objects != it_objects_end) {
+				temp_obj = it_objects->second;
+			}
+		}
+
+		return temp_obj;
+	}
 	/**
 	 * Get maximum value
 	 *

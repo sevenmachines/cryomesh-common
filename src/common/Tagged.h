@@ -56,6 +56,9 @@ public:
 		uuid(boost::uuids::random_generator()()) {
 	}
 
+	Tagged(const Tagged & obj){
+		this->uuid = obj.uuid;
+	}
 	/**
 	 * Destructor
 	 *
@@ -151,7 +154,23 @@ public:
 		return id;
 	}*/
 
-private:
+	/**
+	 * Assignment operator
+	 *
+	 * @param const Tagged & obj
+	 * 		RHS assignment
+	 *
+	 * @return Tagged &
+	 * 		This object after assignment
+	 */
+	Tagged & operator=(const Tagged & obj){
+		if (&obj == this){
+			return *this;
+		}
+		this->uuid = obj.uuid;
+		return *this;
+	}
+protected:
 	/*
 	 * Unique uuid of this object
 	 *

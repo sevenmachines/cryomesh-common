@@ -34,8 +34,8 @@ std::string ConfigEntry::getOptionValue(const std::string & key) const {
 	}
 	return val;
 }
-int ConfigEntry::getIntegerFormattedOptionValue(const std::string & key) const{
-	int val_int = atoi (this->getOptionValue(key).c_str());
+int ConfigEntry::getIntegerFormattedOptionValue(const std::string & key) const {
+	int val_int = atoi(this->getOptionValue(key).c_str());
 	return val_int;
 }
 
@@ -121,6 +121,38 @@ std::ostream& operator<<(std::ostream & os, const ConfigEntry & obj) {
 	return os;
 }
 
+std::vector<int> ConfigEntry::toIntegerMultipleValues(const std::vector<std::string> &values) {
+	std::vector<int> intvals;
+
+	// forall in values
+	{
+		std::vector<std::string>::const_iterator it_values = values.begin();
+		const std::vector<std::string>::const_iterator it_values_end = values.end();
+		while (it_values != it_values_end) {
+			int tempval = atoi(it_values->c_str());
+			intvals.push_back(tempval);
+			++it_values;
+		}
+	}
+	return intvals;
+}
+
+std::vector<std::string> ConfigEntry::tokenizeMultipleValueString(const std::string & values) {
+	std::vector<std::string> tokened_values;
+
+	// break into space seperated
+	typedef boost::tokenizer<boost::char_separator<char> > char_tokenizer;
+	boost::char_separator<char> sep(" ");
+	char_tokenizer tokens(values, sep);
+
+	char_tokenizer::const_iterator it_tokens = tokens.begin();
+	const char_tokenizer::const_iterator it_tokens_end = tokens.end();
+	while (it_tokens != it_tokens_end) {
+		tokened_values.push_back(*it_tokens);
+		++it_tokens;
+	}
+	return tokened_values;
+}
 }//NAMESPACE
 
 }//NAMESPACE
