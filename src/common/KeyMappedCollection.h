@@ -8,6 +8,7 @@
 #ifndef KEYMAPPEDCOLLECTION_H_
 #define KEYMAPPEDCOLLECTION_H_
 
+
 #include <map>
 #include <list>
 #include <boost/shared_ptr.hpp>
@@ -385,6 +386,30 @@ public:
 
 	typename std::map<U, boost::shared_ptr<T> >::const_iterator end() const {
 		return objects.end();
+	}
+
+	virtual void enableDebug(bool b) {
+#ifdef KEYMAPPEDCOLLECTION_DEBUG
+		int count  =0;
+#endif
+		std::map<U, boost::shared_ptr<T> > & all_objects = this->objects;
+		// forall in all_objects
+		{
+			typename std::map<U, boost::shared_ptr<T> >::iterator it_all_objects =
+					all_objects.begin();
+			const typename std::map<U, boost::shared_ptr<T> >::const_iterator it_all_objects_end =
+					all_objects.end();
+			while (it_all_objects != it_all_objects_end) {
+				it_all_objects->second->enableDebug(true);
+				++it_all_objects;
+#ifdef KEYMAPPEDCOLLECTION_DEBUG
+		++ count ;
+#endif
+			}
+		}
+#ifdef KEYMAPPEDCOLLECTION_DEBUG
+		std::cout<<"KeyMappedCollection::enableDebug: "<<count<<std::endl;
+#endif
 	}
 
 protected:

@@ -49,20 +49,23 @@ public:
 	bool isDebugOn() const{
 		return this->getDebug();
 	}
+
+	virtual void enableDebug(bool b)=0;
+
+	virtual bool checkConstraints()const{
+			return false;
+		}
+protected:
+
 	/**
 	 * Set debug on or off
 	 *
 	 * @param bool
 	 * 	True to set debugging on, false otherwise
 	 */
-	void setDebug(bool b) {
+	virtual void setDebug(bool b) {
 		debug = b;
 	}
-	virtual bool checkConstraints()const{
-			return false;
-		}
-protected:
-
 
 private:
 	/**
