@@ -34,7 +34,9 @@ public:
 
 	std::map<std::string, int> getIntegerFormattedOptions() const ;
 	std::string getRawEntry() const;
-
+	std::pair<std::string, std::string> extractCommand(const std::string & rawtext);
+		std::pair<std::string, std::string> extractOptionPair(const std::string & rawtext);
+		std::pair<std::string, std::string> extractOption(const std::string & rawtext);
 	/**
 		 * To stream operator
 		 *
@@ -52,6 +54,7 @@ public:
 		static std::vector<std::string> tokenizeMultipleValueString(const std::string & values) ;
 protected:
 	void parseEntry();
+
 private:
 	std::string command;
 	std::map<std::string, std::string> options;
