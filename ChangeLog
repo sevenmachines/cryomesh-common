@@ -1,3 +1,7 @@
+2011-05-25  SevenMachines  <SevenMachines@yahoo.co.uk>
+
+	* src/config/ConfigTranslator.cpp (ConfigTranslator::ConfigTranslator): Added create/read from stream
+
 2011-03-30  SevenMachines  <SevenMachines@yahoo.co.uk>
 
 	* src/config/ConfigEntry.cpp (ConfigEntry::getIntegerFormattedOptions): convenience function to change all the options to ints

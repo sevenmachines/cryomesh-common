@@ -12,7 +12,10 @@
 namespace cryomesh {
 
 namespace config {
-
+ConfigTranslator::ConfigTranslator( std::istream & is) {
+	// open file
+	this->readRawEntries(is);
+}
 ConfigTranslator::ConfigTranslator(const std::string & filename) {
 	// open file
 	std::ifstream ifs(filename.c_str());
@@ -28,7 +31,7 @@ ConfigTranslator::ConfigTranslator(const std::string & filename) {
 ConfigTranslator::~ConfigTranslator() {
 }
 
- ConfigEntry  ConfigTranslator::getConfigEntryByCommand(const std::string & com) const {
+ConfigEntry ConfigTranslator::getConfigEntryByCommand(const std::string & com) const {
 	std::list<ConfigEntry>::const_iterator it_entries = entries.begin();
 	const std::list<ConfigEntry>::const_iterator it_entries_end = entries.end();
 	while (it_entries != it_entries_end) {
@@ -42,7 +45,7 @@ ConfigTranslator::~ConfigTranslator() {
 	return tempent;
 }
 
-void ConfigTranslator::readRawEntries(std::istream & fs) {
+void ConfigTranslator::readRawEntries( std::istream & fs) {
 	std::string line;
 	while (fs.good() == true) {
 		getline(fs, line);

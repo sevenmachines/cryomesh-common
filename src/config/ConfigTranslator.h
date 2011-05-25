@@ -28,24 +28,25 @@ namespace config {
  */
 class ConfigTranslator {
 public:
-	ConfigTranslator( const std::string & filename);
+	ConfigTranslator( std::istream & is);
+	ConfigTranslator(const std::string & filename);
 	virtual ~ConfigTranslator();
 	const std::list<ConfigEntry> & getEntries() const;
 
-	 ConfigEntry getConfigEntryByCommand(const std::string & com) const;
+	ConfigEntry getConfigEntryByCommand(const std::string & com) const;
 
 	/**
-		 * To stream operator
-		 *
-		 *	@param std::ostream & os
-		 *		The output stream
-		 *	@param const ConfigTranslator & obj
-		 *		The object to stream
-		 *
-		 *	@return std::ostream &
-		 *		The output stream
-		 */
-		friend std::ostream& operator<<(std::ostream & os, const ConfigTranslator & obj);
+	 * To stream operator
+	 *
+	 *	@param std::ostream & os
+	 *		The output stream
+	 *	@param const ConfigTranslator & obj
+	 *		The object to stream
+	 *
+	 *	@return std::ostream &
+	 *		The output stream
+	 */
+	friend std::ostream& operator<<(std::ostream & os, const ConfigTranslator & obj);
 protected:
 	/**
 	 * Read in raw entries from a stream
