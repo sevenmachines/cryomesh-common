@@ -5,7 +5,7 @@
  *      Author: "SevenMachines <SevenMachines@yahoo.co.uk>"
  */
 
-#define CONFIGTRANSLATOR_DEBUG
+//#define CONFIGTRANSLATOR_DEBUG
 
 #include "ConfigTranslator.h"
 

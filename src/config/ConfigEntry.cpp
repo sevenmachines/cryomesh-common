@@ -84,14 +84,16 @@ void ConfigEntry::parseEntry() {
 	while (done_processing == false && working_entry != "") {
 		ret_pair = this->extractOptionPair(working_entry);
 		std::pair<std::string, std::string> temp_opt = this->extractOption(ret_pair.first);
+#ifdef CONFIGENTRY_DEBUG
 		std::cout << "ConfigEntry::parseEntry: " << "pair: " << temp_opt.first << ", " << temp_opt.second << std::endl;
+#endif
 		if (temp_opt.first != "") {
 			options.insert(temp_opt);
 		}
 
 		if (working_entry.size() == ret_pair.second.size()) {
 			done_processing = true;
-			std::cout << "ConfigEntry::parseEntry: " << "Stuck in option extraction loop" << std::endl;
+			//std::cout << "ConfigEntry::parseEntry: " << "Stuck in option extraction loop... exiting" << std::endl;
 		}
 		working_entry = ret_pair.second;
 	}
@@ -152,7 +154,9 @@ std::vector<std::string> ConfigEntry::tokenizeMultipleValueString(const std::str
 }
 
 std::pair<std::string, std::string> ConfigEntry::extractCommand(const std::string & rawtext) {
+#ifdef CONFIGENTRY_DEBUG
 	std::cout << "ConfigEntry::extractCommand: " << "raw: " << rawtext << std::endl;
+#endif
 	// format
 	//  command option1=1 option2="2 3 4"
 	std::string ret_comm = "";
@@ -163,11 +167,15 @@ std::pair<std::string, std::string> ConfigEntry::extractCommand(const std::strin
 		ret_comm = temp_raw_text.substr(0, first_space);
 		ret_remain = boost::trim_left_copy(temp_raw_text.substr(first_space + 1));
 	}
+#ifdef CONFIGENTRY_DEBUG
 	std::cout << "ConfigEntry::extractCommand: " << "pair: " << ret_comm << ", " << ret_remain << std::endl;
+#endif
 	return std::pair<std::string, std::string>(ret_comm, ret_remain);
 }
 std::pair<std::string, std::string> ConfigEntry::extractOptionPair(const std::string & rawtext) {
+#ifdef CONFIGENTRY_DEBUG
 	std::cout << "ConfigEntry::extractOptionPair: " << "raw: " << rawtext << std::endl;
+#endif
 	std::string ret_opt = "";
 	std::string ret_remain = "";
 
@@ -180,8 +188,8 @@ std::pair<std::string, std::string> ConfigEntry::extractOptionPair(const std::st
 	int second_eq = rawtext.find_first_of('=', first_eq + 1);
 	int first_space = rawtext.find_first_of(' ');
 
-	std::cout << "ConfigEntry::extractOptionPair: " << "first_quote " << first_quote << "second_quote " << second_quote
-			<< "first_eq " << first_eq << "second_eq " << second_eq << "first_space " << first_space << std::endl;
+	//std::cout << "ConfigEntry::extractOptionPair: " << "first_quote " << first_quote << "second_quote " << second_quote
+	//		<< "first_eq " << first_eq << "second_eq " << second_eq << "first_space " << first_space << std::endl;
 
 	bool get_quoted_option = (first_quote != std::string::npos) && (second_quote < second_eq || second_eq
 			== std::string::npos);
@@ -196,14 +204,18 @@ std::pair<std::string, std::string> ConfigEntry::extractOptionPair(const std::st
 		ret_opt = rawtext.substr(0, first_space);
 		ret_remain = rawtext.substr(first_space + 1);
 	}
-	boost::trim( ret_opt);
-	boost::trim( ret_remain);
+	boost::trim(ret_opt);
+	boost::trim(ret_remain);
+#ifdef CONFIGENTRY_DEBUG
 	std::cout << "ConfigEntry::extractOptionPair: " << "pair: " << ret_opt << ", " << ret_remain << std::endl;
+#endif
 	return (std::pair<std::string, std::string>(ret_opt, ret_remain));
 
 }
 std::pair<std::string, std::string> ConfigEntry::extractOption(const std::string & rawtext) {
+#ifdef CONFIGENTRY_DEBUG
 	std::cout << "ConfigEntry::extractOption: " << "raw: " << rawtext << std::endl;
+#endif
 	//seperate out option pairs
 	typedef boost::tokenizer<boost::char_separator<char> > char_tokenizer;
 	boost::char_separator<char> sep_equals("=");
@@ -220,7 +232,9 @@ std::pair<std::string, std::string> ConfigEntry::extractOption(const std::string
 	if (it_option != it_option_end) {
 		second = *it_option;
 	}
+#ifdef CONFIGENTRY_DEBUG
 	std::cout << "ConfigEntry::extractOption: " << "pair: " << first << ", " << second << std::endl;
+#endif
 	return (std::pair<std::string, std::string>(first, second));
 }
 }//NAMESPACE
