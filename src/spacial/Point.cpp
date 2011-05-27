@@ -5,6 +5,8 @@
  *      Author: niall
  */
 
+//#define POINT_DEBUG
+
 #include "Point.h"
 #include "SphericalPoint.h"
 #include <math.h>
@@ -35,7 +37,9 @@ double Point::getDistance(const Point & start) const {
 	double p1 = (double) x - start.getX();
 	double p2 = (double) y - start.getY();
 	double p3 = (double) z - start.getZ();
-	//std::cout<<"Point::getDistance: "<<"p1,p2,p3: "<< p1<<", "<<p2<<", "<<p3<<std::endl;
+#ifdef POINT_DEBUG
+	std::cout<<"Point::getDistance: "<<"p1,p2,p3: "<< p1<<", "<<p2<<", "<<p3<<std::endl;
+#endif
 	double distance = sqrt((p1 * p1) + (p2 * p2) + (p3 * p3));
 	return distance;
 }

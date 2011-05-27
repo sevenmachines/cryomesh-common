@@ -9,86 +9,64 @@
 #define ACTIVITYGRID_H_
 
 #include <boost/multi_array.hpp>
+#include <boost/tuple/tuple.hpp>
+#include <boost/tuple/tuple_comparison.hpp>
+#include "BoundingBox.h"
 #include "Point.h"
+#include "common/Maths.h"
+#include <vector>
 
 namespace cryomesh {
 
 namespace spacial {
 
-template<class T>
-
 class ActivityGrid {
 
-	typedef boost::multi_array<T, 3> SpacialArray;
-	typedef typename SpacialArray::index SpacialIndex;
 public:
-	ActivityGrid(const int x, const int y, const int z, const double sc = 1.0) :
-		gridX(x), gridY(y), gridZ(z), scale(sc), MIN_SCALE(1.0 / 1000.0), MAX_SCALE(1000) {
-		SpacialArray temp_grid(boost::extents[x][y][z]);
-		activityGrid = temp_grid;
-	}
+	typedef boost::multi_array<double, 3> SpacialArray;
+	typedef typename SpacialArray::index SpacialIndex;
+	typedef SpacialArray::extent_gen SpacialExtent;
+	typedef boost::tuple<int, int, int> Coordinates;
 
-	virtual ~ActivityGrid() {
+	ActivityGrid(const int x, const int y, const int z, const double sc = 1.0);
 
-	}
+	virtual ~ActivityGrid() ;
 
-	virtual T getInterpolatedActivity(const Point & point) =0;
-	virtual void setNearestActivity(const Point & point, const T & activity) =0;
+	boost::shared_ptr<BoundingBoxElement> getBoundingBoxElement(Point element, Point reference) const ;
 
-	const T & getGridPoint(const int x, const int y, const int z) const {
-		return activityGrid[x][y][z];
-	}
-	const T & getScaledGridPoint(const int x, const int y, const int z) const {
-		return activityGrid[x][y][z];
-	}
-	const SpacialArray & getActivityGrid() const {
-		return activityGrid;
-	}
+	const boost::shared_ptr<BoundingBox> getBoundingBox(Point reference, int depth =1 ) ;
 
-	void setGridSize(const int x, const int y, const int z) {
-		this->reScale(x, y, z, this->scale);
-	}
-	double getScale() const {
-		return scale;
-	}
-	void setScale(double d) {
-		double clamped_scale = std::max(MIN_SCALE, d);
-		clamped_scale = std::min(MAX_SCALE, d);
-		this->reScale(gridX, gridY, gridZ, clamped_scale);
-	}
+	virtual double getInterpolatedActivity(const Point & point, int depth = 1, const BoundingBox::InterpolationStyle style = BoundingBox::InterpolationStyle::INVERSE_R) ;
 
-protected:
-	virtual void clearGrid(const T & blank_value) {
-		//activityGrid.reindex(blank_value);
-	}
-	virtual void reScale(const int x, const int y, const int z, const double sc) {
-		SpacialArray temp_grid(boost::extents[x][y][z]);
-		for (SpacialIndex i = 0; i < x; i++) {
-			for (SpacialIndex j = 0; i < y; i++) {
-				for (SpacialIndex k = 0; i < z; i++) {
-					double scaled_x = i * sc;
-					double scaled_y = j * sc;
-					double scaled_z = k * sc;
-					T interpolated_act = this->getInterpolatedActivity(Point(scaled_x, scaled_y, scaled_z));
-					temp_grid[i][j][k] = interpolated_act;
-				}
-			}
-		}
-		activityGrid = temp_grid;
-		gridX = x;
-		gridY = y;
-		gridZ = z;
-		scale = sc;
-	}
+	virtual void setNearestActivity(const Point & point, const double & activity);
 
-protected:
-	int gridX;
-	int gridY;
-	int gridZ;
+	const double getGridPointActivity(const int x, const int y, const int z) const ;
+
+	const std::map<Coordinates, double> & getActivityGrid() const;
+
+	double getScale() const ;
+
+	void setScale(double d);
+
+	virtual void randomise(const double min = 0.0, const double max = 1.0) ;
+
+	virtual void clearGrid(const double val = 0.0);
+
+	virtual void reScale(const int x, const int y, const int z, const double sc) ;
+
+	const Coordinates & getBoundingCoordinates() const ;
+
+	double getActivityDecay() const ;
+
+	void setActivityDecay(double d) ;
+
+private:
+	double activityDecay;
+	Coordinates boundingCoordinates;
 	double scale;
 	const double MIN_SCALE;
 	const double MAX_SCALE;
-	SpacialArray activityGrid;
+	std::map<Coordinates, double> activityGrid;
 };
 
 }
