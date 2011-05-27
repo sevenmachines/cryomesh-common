@@ -28,15 +28,19 @@ public:
 	typedef SpacialArray::extent_gen SpacialExtent;
 	typedef boost::tuple<int, int, int> Coordinates;
 
+	enum ActivityModifier {
+		ACTIVITY_MODIFIER_ADDITION = 1, ACTIVITY_MODIFIER_MULTIPLY = 2, ACTIVITY_MODIFIER_INVERT = 4
+	};
 	ActivityGrid(const int x, const int y, const int z, const double sc = 1.0);
 
-	virtual ~ActivityGrid() ;
+	virtual ~ActivityGrid();
 
 	boost::shared_ptr<BoundingBoxElement> getBoundingBoxElement(Point element, Point reference) const ;
 
-	const boost::shared_ptr<BoundingBox> getBoundingBox(Point reference, int depth =1 ) ;
+	const boost::shared_ptr<BoundingBox> getBoundingBox(Point reference, int depth = 1);
 
-	virtual double getInterpolatedActivity(const Point & point, int depth = 1, const BoundingBox::InterpolationStyle style = BoundingBox::InterpolationStyle::INVERSE_R) ;
+	virtual double getInterpolatedActivity(const Point & point, int depth = 1,
+			const BoundingBox::InterpolationStyle style = BoundingBox::InterpolationStyle::INVERSE_R);
 
 	virtual void setNearestActivity(const Point & point, const double & activity);
 
@@ -48,17 +52,18 @@ public:
 
 	void setScale(double d);
 
-	virtual void randomise(const double min = 0.0, const double max = 1.0) ;
+	virtual void randomise(const double min = 0.0, const double max = 1.0);
 
 	virtual void clearGrid(const double val = 0.0);
+	virtual void applyGridActivityModifier(const double val_modifier = 0.5, int activity_modifier = ACTIVITY_MODIFIER_MULTIPLY);
 
-	virtual void reScale(const int x, const int y, const int z, const double sc) ;
+	virtual void reScale(const int x, const int y, const int z, const double sc);
 
 	const Coordinates & getBoundingCoordinates() const ;
 
 	double getActivityDecay() const ;
 
-	void setActivityDecay(double d) ;
+	void setActivityDecay(double d);
 
 private:
 	double activityDecay;

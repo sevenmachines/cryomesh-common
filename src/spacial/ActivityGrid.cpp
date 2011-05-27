@@ -13,11 +13,11 @@ namespace cryomesh {
 
 namespace spacial {
 
-ActivityGrid::ActivityGrid(const int x, const int y, const int z, const double sc ) :
+ActivityGrid::ActivityGrid(const int x, const int y, const int z, const double sc) :
 	boundingCoordinates(x, y, z), activityDecay(1), scale(sc), MIN_SCALE(1.0 / 1000.0), MAX_SCALE(1000) {
 #ifdef ACTIVITYGRID_DEBUG
 	std::cout << "ActivityGrid::ActivityGrid: " << "(" << boundingCoordinates.get<0> () << ", "
-			<< boundingCoordinates.get<1> () << ", " << boundingCoordinates.get<2> () << ")" << std::endl;
+	<< boundingCoordinates.get<1> () << ", " << boundingCoordinates.get<2> () << ")" << std::endl;
 #endif
 	int gridX = boundingCoordinates.get<0> ();
 	int gridY = boundingCoordinates.get<1> ();
@@ -45,17 +45,17 @@ boost::shared_ptr<BoundingBoxElement> ActivityGrid::getBoundingBoxElement(Point 
 	return temp_element;
 }
 
-const boost::shared_ptr<BoundingBox> ActivityGrid::getBoundingBox(Point reference, int depth ) {
+const boost::shared_ptr<BoundingBox> ActivityGrid::getBoundingBox(Point reference, int depth) {
 	boost::shared_ptr<BoundingBox> temp_box(new BoundingBox(*this, reference, depth));
 	return temp_box;
 }
 
 double ActivityGrid::getInterpolatedActivity(const Point & point, int depth,
-		const BoundingBox::InterpolationStyle style ) {
+		const BoundingBox::InterpolationStyle style) {
 	// repeatedly get bounding boxes and sum the results
 	double total_act = 0;
 	for (int i = 0; i < depth; i++) {
-		boost::shared_ptr<BoundingBox> temp_box = this->getBoundingBox(point, i +1);
+		boost::shared_ptr<BoundingBox> temp_box = this->getBoundingBox(point, i + 1);
 		total_act += temp_box->getInterpolatedActivity();
 #ifdef ACTIVITYGRID_DEBUG
 		std::cout<<"ActivityGrid::getInterpolatedActivity: "<<"level: "<<i+1<<" total_act: "<< total_act<<std::endl;
@@ -95,7 +95,7 @@ void ActivityGrid::setScale(double d) {
 	this->reScale(gridX, gridY, gridZ, clamped_scale);
 }
 
-void ActivityGrid::randomise(const double min , const double max ) {
+void ActivityGrid::randomise(const double min, const double max) {
 	int gridX = boundingCoordinates.get<0> ();
 	int gridY = boundingCoordinates.get<1> ();
 	int gridZ = boundingCoordinates.get<2> ();
@@ -115,7 +115,7 @@ void ActivityGrid::randomise(const double min , const double max ) {
 	}
 }
 
-void ActivityGrid::clearGrid(const double val ) {
+void ActivityGrid::clearGrid(const double val) {
 	int gridX = boundingCoordinates.get<0> ();
 	int gridY = boundingCoordinates.get<1> ();
 	int gridZ = boundingCoordinates.get<2> ();
@@ -134,6 +134,50 @@ void ActivityGrid::clearGrid(const double val ) {
 		}
 	}
 }
+
+void ActivityGrid::applyGridActivityModifier(const double val_modifier, int activity_modifier) {
+
+	bool do_invert = false;
+	bool do_add = false;
+	bool do_multiply = false;
+	double val = val_modifier;
+	if (activity_modifier & ACTIVITY_MODIFIER_ADDITION) {
+		do_add = true;
+	}
+	if (activity_modifier & ACTIVITY_MODIFIER_MULTIPLY) {
+		do_multiply = true;
+	}
+	if (activity_modifier & ACTIVITY_MODIFIER_INVERT) {
+		do_invert = true;
+	}
+
+	int gridX = boundingCoordinates.get<0> ();
+	int gridY = boundingCoordinates.get<1> ();
+	int gridZ = boundingCoordinates.get<2> ();
+	for (int i = 0; i < gridX; i++) {
+		for (int j = 0; j < gridY; j++) {
+			for (int k = 0; k < gridZ; k++) {
+				Coordinates coords(i, j, k);
+				std::map<Coordinates, double>::iterator it_found = activityGrid.find(coords);
+				if (it_found != activityGrid.end()) {
+					if (do_add == true) {
+						it_found->second += val;
+					}
+					if (do_multiply == true) {
+						it_found->second *= val;
+					}
+					if (do_invert == true) {
+						it_found->second *= -1;
+					}
+				} else {
+					std::cout << "ActivityGrid::clearGrid: " << "Error: Could not find coordinates (" << i << ", " << j
+							<< ", " << k << ")" << std::endl;
+				}
+			}
+		}
+	}
+}
+
 void ActivityGrid::reScale(const int x, const int y, const int z, const double sc) {
 	for (int i = 0; i < x; i++) {
 		for (int j = 0; j < y; j++) {
