@@ -26,6 +26,17 @@ public:
 	virtual ~Point();
 	double getDistance(const Point & start) const;
 	void setToMinimumDistances(double min);
+
+	/**
+	 * Scale point by value
+	 *
+	 * @param double
+	 * 	factor to scale by
+	 *
+	 * @return
+	 * 	This scaled point
+	 */
+	Point  getScaled(double factor) const;
 	double getX()const ;
 	double getY()const;
 	double getZ()const;

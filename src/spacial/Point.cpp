@@ -54,6 +54,11 @@ void Point::setToMinimumDistances(double min) {
 		z = min;
 	}
 }
+
+Point Point::getScaled(double factor) const {
+	return Point (this->x * factor, this->y * factor, this->z * factor);
+}
+
 double Point::getX() const {
 	return x;
 }
@@ -64,13 +69,13 @@ double Point::getZ() const {
 	return z;
 }
 
-Point Point::getNormalisedVector() const{
+Point Point::getNormalisedVector() const {
 	// get distance to origin
-	double dist = (*this).getDistance(Point(0,0,0));
-	double new_x = (*this).getX()/dist;
-	double new_y = (*this).getY()/dist;
-	double new_z = (*this).getZ()/dist;
-	return Point (new_x, new_y, new_z);
+	double dist = (*this).getDistance(Point(0, 0, 0));
+	double new_x = (*this).getX() / dist;
+	double new_y = (*this).getY() / dist;
+	double new_z = (*this).getZ() / dist;
+	return Point(new_x, new_y, new_z);
 }
 bool Point::equals(const Point & obj) const {
 	const double DELTA = 0.000001;
@@ -80,8 +85,7 @@ bool Point::equals(const Point & obj) const {
 	return (bx && by && bz);
 }
 bool Point::operator==(const Point & obj) const {
-	return ((this->x == obj.getX()) && (this->y == obj.getY()) && (this->z
-			== obj.getZ()));
+	return ((this->x == obj.getX()) && (this->y == obj.getY()) && (this->z == obj.getZ()));
 }
 Point & Point::operator=(const Point & obj) {
 	if (this != &obj) {
@@ -92,20 +96,16 @@ Point & Point::operator=(const Point & obj) {
 	return *this;
 }
 Point Point::operator+(const Point & obj) const {
-	return Point(this->getX() + obj.getX(), this->getY() + obj.getY(),
-			this->getZ() + obj.getZ());
+	return Point(this->getX() + obj.getX(), this->getY() + obj.getY(), this->getZ() + obj.getZ());
 }
 Point Point::operator-(const Point & obj) const {
-	return Point(this->getX() - obj.getX(), this->getY() - obj.getY(),
-			this->getZ() - obj.getZ());
+	return Point(this->getX() - obj.getX(), this->getY() - obj.getY(), this->getZ() - obj.getZ());
 }
-Point  Point::operator*( double d) const{
-	return Point(this->getX()*d , this->getY()*d,
-				this->getZ()*d);
+Point Point::operator*(double d) const {
+	return Point(this->getX() * d, this->getY() * d, this->getZ() * d);
 }
 std::ostream & operator<<(std::ostream& os, const Point & obj) {
-	os << "Point: " << "(" << obj.getX() << ", " << obj.getY()
-			<< ", " << obj.getZ()<<")" ;
+	os << "Point: " << "(" << obj.getX() << ", " << obj.getY() << ", " << obj.getZ() << ")";
 	return os;
 
 }

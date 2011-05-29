@@ -5,6 +5,8 @@
  *      Author: SevenMachines<SevenMachines@yahoo.co.uk>
  */
 
+#define MATHS_DEBUG
+
 #ifndef MATHS_H_
 #define MATHS_H_
 
@@ -81,11 +83,17 @@ public:
 
 	template<class T>
 	static T clamp(T & val, const T & low, const T & high) {
+#ifdef MATHS_DEBUG
+		std::cout << "Maths::clamp: " << "(" << val << ", " << low << ", " << high << ")";
+#endif
 		if (val < low) {
 			val = low;
 		} else if (val > high) {
 			val = high;
 		}
+#ifdef MATHS_DEBUG
+		std::cout << " = "<<val<<std::endl;
+#endif
 		return val;
 	}
 };
