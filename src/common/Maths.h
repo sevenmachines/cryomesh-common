@@ -5,7 +5,7 @@
  *      Author: SevenMachines<SevenMachines@yahoo.co.uk>
  */
 
-#define MATHS_DEBUG
+//#define MATHS_DEBUG
 
 #ifndef MATHS_H_
 #define MATHS_H_

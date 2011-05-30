@@ -37,6 +37,7 @@ public:
 	 * 	This scaled point
 	 */
 	Point  getScaled(double factor) const;
+	Point getRounded()const;
 	double getX()const ;
 	double getY()const;
 	double getZ()const;
@@ -51,7 +52,7 @@ public:
 	Point  operator+(const Point & obj) const;
 	Point  operator-(const Point & obj) const;
 	Point  operator*( double d) const;
-
+	Point operator/(double d) const;
 	friend std::ostream & operator<<(std::ostream& os, const Point & obj);
 
 private:

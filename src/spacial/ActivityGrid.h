@@ -26,9 +26,7 @@ class ActivityGrid {
 
 public:
 
-#ifdef CUTE_DEBUG
 	friend class ActivityGridTest;
-#endif
 	friend class BoundingBox;
 
 	typedef Coordinates<int> CoordinatesIntegers;
@@ -54,6 +52,8 @@ public:
 
 	virtual int getScale() const ;
 	virtual void setScale(const int sc);
+	virtual double getUnitFromScaledDistance(double d) const;
+	virtual double getScaledFromUnitDistance(int d) const;
 
 	virtual void setBoundingBox(const CoordinatesIntegers & new_size, double val = 0.0);
 
@@ -112,7 +112,39 @@ public:
 
 	const boost::shared_ptr<BoundingBox> getBoundingBox(Point reference, int depth = 1);
 
-	virtual void setNearestActivity(const Point & point, const double & activity);
+	/**
+	 * Find the nearest grid point to a point and return its activity
+	 *
+	 *	@param Point
+	 *		The reference point for calculation
+	 *
+	 * @return std::pair<CoordinatesIntegers, double >
+	 * 	The nearest grid point values
+	 */
+	virtual const std::pair<CoordinatesIntegers, double> getNearestGridPointActivity(const Point & point) const;
+
+	/**
+	 * Find the nearest grid point to a point and set its activity
+	 *
+	 * @param Point
+	 * 	Point reference
+	 * @param double
+	 * 	The activity to set the point to
+	 *
+	 * @return const std::pair<CoordinatesIntegers, double>
+	 * 	The point that was set
+	 */
+	virtual void setNearestGridPointActivity(const Point & point, const double & activity);
+
+	/**
+	 * Apply an activity at a scaled point and affect nearby grid points
+	 *
+	 * @param Point
+	 * 	Point reference
+	 * @param double
+	 * 	The activity to set the point to
+	 */
+	void applyPointActivityToGrid(const Point & point, const double & activity, BoundingBox::InterpolationStyle decayStyle = BoundingBox::InterpolationStyle::INVERSE_R);
 
 	double getGridPointActivity(const CoordinatesIntegers & coords) const ;
 	double getGridPointActivity(const int x, const int y, const int z) const ;
@@ -123,17 +155,70 @@ public:
 
 	void setActivityDecay(double d);
 
+	GridContainer  getGridPointsByActivity(double act) ;
+	GridContainer  getGridPointsByActivity(double act_min, double act_max);
+	/**
+	 * Compare the grid points of this grid with another, using  ints with
+	 * the count of those in the comparison grid that are greater than ours, lesser than or cant be found
+	 *
+	 * @param ActivityGrid
+	 * 	Grid to compare with
+	 * @param int
+	 * 	Store for equal to count
+	 * @param int
+	 * 	Store for greater than count
+	 * @param int
+	 * 	Store for less than count
+	  * @param int
+	 * 	Store for not found count
+	  */
+	void compareGridPoints(const ActivityGrid & grid_comp, int & equal_to, int & greater_than, int & less_than, int & not_known)const;
+
 	void growDimensions(const CoordinatesIntegers & coords, double val = 0.0);
 	void shrinkDimensions(const CoordinatesIntegers & coords);
 
+	/**
+		 * To stream operator
+		 *
+		 *	@param std::ostream & os
+		 *		The output stream
+		 *	@param const ActivityGrid & obj
+		 *		The object to stream
+		 *
+		 *	@return std::ostream &
+		 *		The output stream
+		 */
+		friend std::ostream& operator<<(std::ostream & os, const ActivityGrid & obj);
 protected:
 	const std::map<CoordinatesIntegers, double>::const_iterator
 	findGridCoordinate(const CoordinatesIntegers & coords) const;
 	std::map<CoordinatesIntegers, double>::iterator findMutableGridCoordinate(const CoordinatesIntegers & coords);
-	std::map<CoordinatesIntegers, double>::iterator setGridCoordinate(const CoordinatesIntegers & coords, double val);
+	std::map<CoordinatesIntegers, double>::iterator
+	setGridPointActivity(const CoordinatesIntegers & coords, double val);
 
+	/**
+	 *  Apply activity from an unscaled point to another unscaled point
+	 *
+	 **/
+	std::pair<CoordinatesIntegers, double> &
+				applyPointActivityToGridPoint(const Point & source, const double source_activity,
+						std::pair<CoordinatesIntegers, double> & sink,
+						const ActivityModifier modifier = ACTIVITY_MODIFIER_ADDITION, BoundingBox::InterpolationStyle decayStyle = BoundingBox::InterpolationStyle::INVERSE_R);
 private:
+	/**
+	 * The Coordinates that define the cube that encases all points
+	 * Note they are non-inclusive
+	 *
+	 * @val CoordinatesIntegers
+	 */
 	CoordinatesIntegers boundingUnitCoordinates;
+
+	/**
+	 * Activity rate of decay per unit distance
+	 * eg 2 -> activity falls by two per 1 unit of distance
+	 *
+	 * @val double
+	 */
 	double activityDecay;
 
 	/**
@@ -142,8 +227,22 @@ private:
 	 * @val int
 	 */
 	int scale;
+
 	const int MIN_SCALE;
 	const int MAX_SCALE;
+
+	/**
+	 * Value of activity effect below which we stop calculating it
+	 *
+	 * @val double
+	 */
+	const double ACTIVITY_DECAY_CUTOFF;
+
+	/**
+	 * Container of activity grid points and activities
+	 *
+	 * @val GridContainer
+	 */
 	GridContainer activityGrid;
 };
 

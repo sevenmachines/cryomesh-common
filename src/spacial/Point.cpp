@@ -10,6 +10,7 @@
 #include "Point.h"
 #include "SphericalPoint.h"
 #include <math.h>
+#include <boost/math/special_functions/round.hpp>
 
 namespace cryomesh {
 
@@ -56,7 +57,11 @@ void Point::setToMinimumDistances(double min) {
 }
 
 Point Point::getScaled(double factor) const {
-	return Point (this->x * factor, this->y * factor, this->z * factor);
+	return Point(this->x * factor, this->y * factor, this->z * factor);
+}
+
+Point Point::getRounded() const {
+	return Point(boost::math::round(this->getX()),boost::math::round(this->getY()),boost::math::round(this->getZ()));
 }
 
 double Point::getX() const {
@@ -104,6 +109,14 @@ Point Point::operator-(const Point & obj) const {
 Point Point::operator*(double d) const {
 	return Point(this->getX() * d, this->getY() * d, this->getZ() * d);
 }
+
+Point Point::operator/(double d) const {
+	if ( d ==0){
+		d = 0.00001;
+	}
+	return Point(this->getX() / d, this->getY() /d, this->getZ()/ d);
+}
+
 std::ostream & operator<<(std::ostream& os, const Point & obj) {
 	os << "Point: " << "(" << obj.getX() << ", " << obj.getY() << ", " << obj.getZ() << ")";
 	return os;

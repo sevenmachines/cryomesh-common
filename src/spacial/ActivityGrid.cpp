@@ -5,16 +5,17 @@
  *      Author: "SevenMachines <SevenMachines@yahoo.co.uk>"
  */
 
-#define ACTIVITYGRID_DEBUG
+//#define ACTIVITYGRID_DEBUG
 
 #include "ActivityGrid.h"
+#include <boost/math/special_functions/round.hpp>
 
 namespace cryomesh {
 
 namespace spacial {
 
 ActivityGrid::ActivityGrid(const int x, const int y, const int z, const int sc) :
-	activityDecay(1), scale(sc), MIN_SCALE(1), MAX_SCALE(1000) {
+	activityDecay(1), scale(sc), MIN_SCALE(1), MAX_SCALE(1000), ACTIVITY_DECAY_CUTOFF(0.01) {
 	common::Maths::clamp(scale, MIN_SCALE, MAX_SCALE);
 	this->setBoundingBox(CoordinatesIntegers(x, y, z));
 }
@@ -26,7 +27,7 @@ ActivityGrid::~ActivityGrid() {
 double ActivityGrid::getInterpolatedActivity(const Point & point, int depth,
 		const BoundingBox::InterpolationStyle style) {
 	// get rescaled point
-	Point rescaled_point = point.getScaled(1.0/(double)this->getScale());
+	Point rescaled_point = point.getScaled(1.0 / (double) this->getScale());
 	// repeatedly get bounding boxes and sum the results
 	double total_act = 0;
 	for (int i = 0; i < depth; i++) {
@@ -40,10 +41,71 @@ double ActivityGrid::getInterpolatedActivity(const Point & point, int depth,
 	return total_act;
 }
 
-void ActivityGrid::setNearestActivity(const Point & point, const double & activity) {
+const std::pair<ActivityGrid::CoordinatesIntegers, double> ActivityGrid::getNearestGridPointActivity(
+		const Point & point) const {
+	const Point rescaled_point = point.getScaled((double) this->getScale());
+	const Point grid_point = rescaled_point.getRounded();
+	CoordinatesIntegers coords(grid_point.getX(), grid_point.getY(), grid_point.getZ());
+	double grid_act = this->getGridPointActivity(coords);
+	return std::pair<ActivityGrid::CoordinatesIntegers, double>(coords, grid_act);
+}
+void ActivityGrid::setNearestGridPointActivity(const Point & point, const double & act) {
 	// get rescaled point
-	Point rescaled_point = point.getScaled(1.0/(double)this->getScale());
-	std::cout << "setNearestActivity: " << "TODO" << std::endl;
+	Point rescaled_point = point.getScaled((double) this->getScale());
+	Point grid_point = rescaled_point.getRounded();
+	CoordinatesIntegers coords(grid_point.getX(), grid_point.getY(), grid_point.getZ());
+	this->setGridPointActivity(coords, act);
+}
+
+void ActivityGrid::applyPointActivityToGrid(const Point & point, const double & activity,
+		BoundingBox::InterpolationStyle decayStyle) {
+	// get bounding boxes and apply until the whole box falls below threshold
+	Point rescaled_point = point.getScaled((double) this->getScale());
+
+	// max distance activity will be felt
+	double units_of_activity;
+	if (decayStyle == BoundingBox::InterpolationStyle::INVERSE_R) {
+		units_of_activity = activity / this->getActivityDecay();
+	} else if (decayStyle == BoundingBox::InterpolationStyle::INVERSE_R) {
+		units_of_activity = activity / (this->getActivityDecay() * this->getActivityDecay());
+	} else {
+		units_of_activity = activity / this->getActivityDecay();
+	}
+	double max_scaled_distance = (double) this->getScale() * units_of_activity;
+
+	// round down to get the last affected grid points
+	const int min_x = boost::math::round(rescaled_point.getX() - max_scaled_distance);
+	const int max_x = boost::math::round(rescaled_point.getX() + max_scaled_distance);
+	const int min_y = boost::math::round(rescaled_point.getY() - max_scaled_distance);
+	const int max_y = boost::math::round(rescaled_point.getY() + max_scaled_distance);
+	const int min_z = boost::math::round(rescaled_point.getZ() - max_scaled_distance);
+	const int max_z = boost::math::round(rescaled_point.getZ() + max_scaled_distance);
+#ifdef ACTIVITYGRID_DEBUG
+	std::cout << "ActivityGrid::applyPointActivityToGrid: " << "scaled_point: " << rescaled_point
+			<< " max_scaled_distance: " << max_scaled_distance << std::endl;
+	std::cout << "ActivityGrid::applyPointActivityToGrid: " << "(" << min_x << ", " << max_x << ")" << ", " << "("
+			<< min_y << ", " << max_y << ")" << ", " << "(" << min_z << ", " << max_z << ")" << std::endl;
+
+#endif
+
+	for (int i = min_x; i < max_x; i++) {
+		for (int j = min_y; j < max_y; j++) {
+			for (int k = min_z; k < max_z; k++) {
+				CoordinatesIntegers coords(i, j, k);
+				GridContainer::iterator it_found = activityGrid.find(coords);
+				if (it_found != activityGrid.end()) {
+					// do apply activity
+					std::pair<CoordinatesIntegers, double> temp_sink = *it_found;
+					this->applyPointActivityToGridPoint(rescaled_point, activity, temp_sink, ACTIVITY_MODIFIER_ADDITION);
+					it_found->second = temp_sink.second;
+
+				} else {
+					std::cout << "ActivityGrid::applyPointActivityToGrid: " << "ERROR: Cannot find point " << coords
+							<< " in grid." << std::endl;
+				}
+			}
+		}
+	}
 }
 
 double ActivityGrid::getGridPointActivity(const ActivityGrid::CoordinatesIntegers & coords) const {
@@ -266,12 +328,21 @@ void ActivityGrid::setScale(const int new_scale) {
 	this->scale = new_scale;
 }
 
+double ActivityGrid::getUnitFromScaledDistance(double d) const {
+	return d / (double) this->getScale();
+}
+
+double ActivityGrid::getScaledFromUnitDistance(int d) const {
+	return this->getScale() * d;
+}
+
 const ActivityGrid::CoordinatesIntegers & ActivityGrid::getBoundingUnitCoordinates() const {
 	return boundingUnitCoordinates;
 }
-const ActivityGrid::CoordinatesIntegers  ActivityGrid::getScaledBoundingUnitCoordinates() const {
+const ActivityGrid::CoordinatesIntegers ActivityGrid::getScaledBoundingUnitCoordinates() const {
 	int sc = this->getScale();
-	return CoordinatesIntegers(boundingUnitCoordinates.getX()*sc, boundingUnitCoordinates.getY()*sc, boundingUnitCoordinates.getZ()*sc );
+	return CoordinatesIntegers(boundingUnitCoordinates.getX() * sc, boundingUnitCoordinates.getY() * sc,
+			boundingUnitCoordinates.getZ() * sc);
 }
 double ActivityGrid::getActivityDecay() const {
 	return activityDecay;
@@ -279,6 +350,87 @@ double ActivityGrid::getActivityDecay() const {
 
 void ActivityGrid::setActivityDecay(double d) {
 	activityDecay = d;
+}
+
+ActivityGrid::GridContainer ActivityGrid::getGridPointsByActivity(double act) {
+	return this->getGridPointsByActivity(act, act);
+}
+ActivityGrid::GridContainer ActivityGrid::getGridPointsByActivity(double act_min, double act_max) {
+	GridContainer equal_grid;
+	const double DELTA = 0.00001;
+	// forall in activityGrid
+	{
+		GridContainer::const_iterator it_activityGrid = activityGrid.begin();
+		const GridContainer::const_iterator it_activityGrid_end = activityGrid.end();
+		while (it_activityGrid != it_activityGrid_end) {
+			int compare_min = common::Maths::compareDoubles(it_activityGrid->second, act_min, DELTA);
+			if (compare_min == 0) {
+#ifdef ACTIVITYGRID_DEBUG
+				//std::cout << "ActivityGrid::getGridPointsByActivity: compare_min == 0" << it_activityGrid->first << "("
+				//		<< it_activityGrid->second << "==" << act_min << ")" << std::endl;
+#endif
+				equal_grid[it_activityGrid->first] = it_activityGrid->second;
+			} else if (compare_min == 1) {
+				int compare_max = common::Maths::compareDoubles(it_activityGrid->second, act_max, DELTA);
+				if (compare_max == 0) {
+#ifdef ACTIVITYGRID_DEBUG
+					//std::cout << "ActivityGrid::getGridPointsByActivity: compare_min == 1)" << it_activityGrid->first
+					//		<< "(" << it_activityGrid->second << "==" << compare_max << ")" << std::endl;
+#endif
+					equal_grid[it_activityGrid->first] = it_activityGrid->second;
+				} else if (compare_max == -1) {
+#ifdef ACTIVITYGRID_DEBUG
+					//std::cout << "ActivityGrid::getGridPointsByActivity: compare_max == -1" << it_activityGrid->first
+					//		<< "(" << it_activityGrid->second << "<" << compare_max << ")" << std::endl;
+#endif
+					equal_grid[it_activityGrid->first] = it_activityGrid->second;
+				}
+			}
+			++it_activityGrid;
+		}
+	}
+	return equal_grid;
+}
+void ActivityGrid::compareGridPoints(const ActivityGrid & grid_comp, int & equal_to, int & greater_than,
+		int & less_than, int & not_known) const {
+	// forall in activityGrid
+	{
+		GridContainer::const_iterator it_activityGrid = activityGrid.begin();
+		const GridContainer::const_iterator it_activityGrid_end = activityGrid.end();
+		while (it_activityGrid != it_activityGrid_end) {
+			ActivityGrid::GridContainer::const_iterator it_found = grid_comp.findGridCoordinate(it_activityGrid->first);
+			if (it_found != grid_comp.getActivityGrid().end()) {
+				int comparison = common::Maths::compareDoubles(it_found->second, it_activityGrid->second);
+				//std::cout << "ActivityGrid::compareGridPoints: " << it_found->second << " compared to "
+				//		<< it_activityGrid->second << " is " << comparison << std::endl;
+				if (comparison == 1) {
+#ifdef ACTIVITYGRID_DEBUG
+					std::cout << "ActivityGrid::compareGridPoints: comparison >" << it_found->first << ": "
+							<< it_found->second << " == " << it_activityGrid->first << ": " << it_activityGrid->second
+							<< std::endl;
+#endif
+					++greater_than;
+				} else if (comparison == -1) {
+#ifdef ACTIVITYGRID_DEBUG
+					std::cout << "ActivityGrid::compareGridPoints: comparison <" << it_found->first << ": "
+							<< it_found->second << " == " << it_activityGrid->first << ": " << it_activityGrid->second
+							<< std::endl;
+#endif
+					++less_than;
+				} else {
+#ifdef ACTIVITYGRID_DEBUG
+				//	std::cout << "ActivityGrid::compareGridPoints: comparison == " << it_found->first << ": "
+				//			<< it_found->second << " == " << it_activityGrid->first << ": " << it_activityGrid->second
+				//			<< std::endl;
+#endif
+					++equal_to;
+				}
+			} else {
+				++not_known;
+			}
+			++it_activityGrid;
+		}
+	}
 }
 
 bool ActivityGrid::checkGridPointCount(const CoordinatesIntegers & dimension_point_count) {
@@ -422,7 +574,7 @@ ActivityGrid::GridContainer::iterator ActivityGrid::findMutableGridCoordinate(co
 	 */
 }
 
-ActivityGrid::GridContainer::iterator ActivityGrid::setGridCoordinate(const CoordinatesIntegers & coords, double val) {
+ActivityGrid::GridContainer::iterator ActivityGrid::setGridPointActivity(const CoordinatesIntegers & coords, double val) {
 	GridContainer::iterator it_found = this->findMutableGridCoordinate(coords);
 	if (it_found != activityGrid.end()) {
 		it_found->second = val;
@@ -430,6 +582,63 @@ ActivityGrid::GridContainer::iterator ActivityGrid::setGridCoordinate(const Coor
 		std::cout << "ActivityGrid::setGridCoordinate: " << "WARNING: Not setting value, " << coords << " not found."
 				<< std::endl;
 	}
+}
+
+std::pair<ActivityGrid::CoordinatesIntegers, double> &
+ActivityGrid::applyPointActivityToGridPoint(const Point & source, const double source_activity,
+		std::pair<CoordinatesIntegers, double> & sink, const ActivityModifier modifier,
+		BoundingBox::InterpolationStyle decayStyle) {
+//	std::cout << "ActivityGrid::applyPointActivityToGridPoint: " << sink.second << std::endl;
+
+	if (source_activity != 0) {
+		// calculate applied activity
+		Point dest(sink.first.getX(), sink.first.getY(), sink.first.getZ());
+		double actual_decay_per_grid_unit = activityDecay / (double) this->getScale();
+		double act_mod;
+		if (decayStyle == BoundingBox::InterpolationStyle::INVERSE_R) {
+			act_mod = source_activity - (source.getDistance(dest) * actual_decay_per_grid_unit);
+			if (source_activity > 0) {
+				act_mod = std::max(0.0, act_mod);
+#ifdef ACTIVITYGRID_DEBUG
+				std::cout << "ActivityGrid::applyPointActivityToGridPoint: " << "dest: " << dest << " act_mod: "
+						<< act_mod << "=" << source.getDistance(dest) << "*" << actual_decay_per_grid_unit << std::endl;
+#endif
+			} else {
+				act_mod = std::min(0.0, act_mod);
+			}
+		} else if (decayStyle == BoundingBox::InterpolationStyle::INVERSE_R2) {
+			act_mod = source_activity - (source.getDistance(dest) * actual_decay_per_grid_unit);
+			if (source_activity > 0) {
+				act_mod = std::max(0.0, act_mod);
+			} else {
+				act_mod = std::min(0.0, act_mod);
+			}
+		} else {
+			std::cout << "ActivityGrid::applyPointActivityToGridPoint: "
+					<< "ERROR: Unknown Interpolation style, setting to zero..." << std::endl;
+			act_mod = 0;
+		}
+#ifdef ACTIVITYGRID_DEBUG
+		//	std::cout << "ActivityGrid::applyPointActivityToGridPoint: " << "dest: " << dest << " act_mod: " << act_mod
+		//		<< "=" << source.getDistance(dest) << "*" << actual_decay_per_grid_unit << std::endl;
+#endif
+		if (modifier == ActivityModifier::ACTIVITY_MODIFIER_ADDITION) {
+			sink.second = sink.second + act_mod;
+		} else if (modifier == ActivityModifier::ACTIVITY_MODIFIER_MULTIPLY) {
+			sink.second = sink.second + act_mod;
+		} else if (modifier == ActivityModifier::ACTIVITY_MODIFIER_INVERT) {
+			sink.second = -(sink.second);
+		} else {
+			sink.second = sink.second + act_mod;
+		}
+	}
+	//std::cout << "ActivityGrid::applyPointActivityToGridPoint: END: " << sink.second << std::endl;
+	return sink;
+}
+
+std::ostream& operator<<(std::ostream & os, const ActivityGrid & obj) {
+	os << "ActivityGrid::operator <<: " << "TODO" << std::endl;
+	return os;
 }
 
 }//NAMESPACE
