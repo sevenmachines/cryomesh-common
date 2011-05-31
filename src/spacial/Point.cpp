@@ -9,6 +9,7 @@
 
 #include "Point.h"
 #include "SphericalPoint.h"
+#include "Coordinates.h"
 #include <math.h>
 #include <boost/math/special_functions/round.hpp>
 
@@ -20,6 +21,18 @@ Point::Point() :
 	x(0), y(0), z(0) {
 
 }
+
+Point::Point(const Coordinates<int> & coords) :
+	x(coords.getX()), y(coords.getY()), z(coords.getZ()) {
+
+}
+
+Point::Point(const Coordinates<double> & coords) :
+	x(coords.getX()), y(coords.getY()), z(coords.getZ()) {
+
+}
+
+
 Point::Point(double new_x, double new_y, double new_z) :
 	x(new_x), y(new_y), z(new_z) {
 
@@ -61,7 +74,7 @@ Point Point::getScaled(double factor) const {
 }
 
 Point Point::getRounded() const {
-	return Point(boost::math::round(this->getX()),boost::math::round(this->getY()),boost::math::round(this->getZ()));
+	return Point(boost::math::round(this->getX()), boost::math::round(this->getY()), boost::math::round(this->getZ()));
 }
 
 double Point::getX() const {
@@ -111,10 +124,10 @@ Point Point::operator*(double d) const {
 }
 
 Point Point::operator/(double d) const {
-	if ( d ==0){
+	if (d == 0) {
 		d = 0.00001;
 	}
-	return Point(this->getX() / d, this->getY() /d, this->getZ()/ d);
+	return Point(this->getX() / d, this->getY() / d, this->getZ() / d);
 }
 
 std::ostream & operator<<(std::ostream& os, const Point & obj) {

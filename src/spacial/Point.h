@@ -14,14 +14,19 @@ namespace cryomesh {
 
 namespace spacial {
 
+template<class T>
+class Coordinates;
 class SphericalPoint;
 
 class Point {
 public:
 	Point();
-	Point ( double new_x, double new_y, double new_z);
-	Point (const Point & sp);
-	Point (const SphericalPoint & sp);
+	Point(const Coordinates<int> & coords );
+	Point(const Coordinates<double> & coords );
+
+	Point(double new_x, double new_y, double new_z);
+	Point(const Point & sp);
+	Point(const SphericalPoint & sp);
 
 	virtual ~Point();
 	double getDistance(const Point & start) const;
@@ -36,11 +41,11 @@ public:
 	 * @return
 	 * 	This scaled point
 	 */
-	Point  getScaled(double factor) const;
-	Point getRounded()const;
-	double getX()const ;
-	double getY()const;
-	double getZ()const;
+	Point getScaled(double factor) const;
+	Point getRounded() const;
+	double getX() const ;
+	double getY() const;
+	double getZ() const;
 	/*
 	 * get  a normalised vector
 	 */
@@ -49,9 +54,9 @@ public:
 	bool equals(const Point & obj) const;
 	bool operator==(const Point & obj) const;
 	Point & operator=(const Point & obj);
-	Point  operator+(const Point & obj) const;
-	Point  operator-(const Point & obj) const;
-	Point  operator*( double d) const;
+	Point operator+(const Point & obj) const;
+	Point operator-(const Point & obj) const;
+	Point operator*(double d) const;
 	Point operator/(double d) const;
 	friend std::ostream & operator<<(std::ostream& os, const Point & obj);
 
@@ -65,6 +70,5 @@ private:
 }
 
 }
-
 
 #endif /* POINT_H_ */

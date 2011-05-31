@@ -112,6 +112,8 @@ public:
 
 	const boost::shared_ptr<BoundingBox> getBoundingBox(Point reference, int depth = 1);
 
+	ActivityGrid::GridContainer::iterator getNearestGridPoint(const Point & point) ;
+
 	/**
 	 * Find the nearest grid point to a point and return its activity
 	 *
@@ -144,7 +146,8 @@ public:
 	 * @param double
 	 * 	The activity to set the point to
 	 */
-	void applyPointActivityToGrid(const Point & point, const double & activity, BoundingBox::InterpolationStyle decayStyle = BoundingBox::InterpolationStyle::INVERSE_R);
+	void applyPointActivityToGrid(const Point & point, const double & activity,
+			BoundingBox::InterpolationStyle decayStyle = BoundingBox::InterpolationStyle::INVERSE_R);
 
 	double getGridPointActivity(const CoordinatesIntegers & coords) const ;
 	double getGridPointActivity(const int x, const int y, const int z) const ;
@@ -155,8 +158,8 @@ public:
 
 	void setActivityDecay(double d);
 
-	GridContainer  getGridPointsByActivity(double act) ;
-	GridContainer  getGridPointsByActivity(double act_min, double act_max);
+	GridContainer getGridPointsByActivity(double act);
+	GridContainer getGridPointsByActivity(double act_min, double act_max);
 	/**
 	 * Compare the grid points of this grid with another, using  ints with
 	 * the count of those in the comparison grid that are greater than ours, lesser than or cant be found
@@ -169,26 +172,32 @@ public:
 	 * 	Store for greater than count
 	 * @param int
 	 * 	Store for less than count
-	  * @param int
+	 * @param int
 	 * 	Store for not found count
-	  */
-	void compareGridPoints(const ActivityGrid & grid_comp, int & equal_to, int & greater_than, int & less_than, int & not_known)const;
+	 */
+	void compareGridPoints(const ActivityGrid & grid_comp, int & equal_to, int & greater_than, int & less_than,
+			int & not_known) const;
+	void
+			compareGridPoints(const double comp_act, int & equal_to, int & greater_than, int & less_than,
+					int & not_known) const;
+
+	double getActivitySummation() const;
 
 	void growDimensions(const CoordinatesIntegers & coords, double val = 0.0);
 	void shrinkDimensions(const CoordinatesIntegers & coords);
 
 	/**
-		 * To stream operator
-		 *
-		 *	@param std::ostream & os
-		 *		The output stream
-		 *	@param const ActivityGrid & obj
-		 *		The object to stream
-		 *
-		 *	@return std::ostream &
-		 *		The output stream
-		 */
-		friend std::ostream& operator<<(std::ostream & os, const ActivityGrid & obj);
+	 * To stream operator
+	 *
+	 *	@param std::ostream & os
+	 *		The output stream
+	 *	@param const ActivityGrid & obj
+	 *		The object to stream
+	 *
+	 *	@return std::ostream &
+	 *		The output stream
+	 */
+	friend std::ostream& operator<<(std::ostream & os, const ActivityGrid & obj);
 protected:
 	const std::map<CoordinatesIntegers, double>::const_iterator
 	findGridCoordinate(const CoordinatesIntegers & coords) const;
@@ -201,9 +210,10 @@ protected:
 	 *
 	 **/
 	std::pair<CoordinatesIntegers, double> &
-				applyPointActivityToGridPoint(const Point & source, const double source_activity,
-						std::pair<CoordinatesIntegers, double> & sink,
-						const ActivityModifier modifier = ACTIVITY_MODIFIER_ADDITION, BoundingBox::InterpolationStyle decayStyle = BoundingBox::InterpolationStyle::INVERSE_R);
+	applyPointActivityToGridPoint(const Point & source, const double source_activity,
+			std::pair<CoordinatesIntegers, double> & sink,
+			const ActivityModifier modifier = ACTIVITY_MODIFIER_ADDITION,
+			BoundingBox::InterpolationStyle decayStyle = BoundingBox::InterpolationStyle::INVERSE_R);
 private:
 	/**
 	 * The Coordinates that define the cube that encases all points
