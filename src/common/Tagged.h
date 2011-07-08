@@ -52,21 +52,15 @@ public:
 	 *
 	 * 		Constructor for Tagged
 	 */
-	Tagged() :
-		uuid(boost::uuids::random_generator()()) {
-	}
+	Tagged() ;
 
-	Tagged(const Tagged & obj){
-		this->uuid = obj.uuid;
-	}
+	Tagged(const Tagged & obj);
 	/**
 	 * Destructor
 	 *
 	 * 		Destructor for Tagged
 	 */
-	virtual ~Tagged() {
-
-	}
+	virtual ~Tagged() ;
 
 	/**
 	 * Get the uuid of object
@@ -74,9 +68,7 @@ public:
 	 * @return boost::uuids::uuid
 	 * 		The unique uuid tag of this object
 	 */
-	boost::uuids::uuid getUUID() const {
-		return uuid;
-	}
+	boost::uuids::uuid getUUID() const;
 
 	/**
 	 * Get the uuid of object as a string
@@ -84,11 +76,7 @@ public:
 	 * @return std::string
 	 * 		The unique uuid tag of this object as a string
 	 */
-	std::string getUUIDString() const {
-		std::stringstream ss;
-		ss << (this->getUUID());
-		return ss.str();
-	}
+	std::string getUUIDString() const ;
 
 	/**
 	 * Get the short summary of the uuid of object as a string
@@ -96,12 +84,7 @@ public:
 	 * @return std::string
 	 * 		The short summary uuid tag of this object as a string
 	 */
-	std::string getUUIDSummary() const {
-		std::stringstream ss;
-		ss << (this->getUUID());
-		std::string summary = ss.str().substr(0,8);
-		return summary;
-	}
+	std::string getUUIDSummary() const ;
 
 	/**
 	 * Get the key of object
@@ -109,9 +92,7 @@ public:
 	 * @return boost::uuids::uuid
 	 * 		The unique uuid tag of this object
 	 */
-	boost::uuids::uuid getKey() const {
-		return this->getUUID();
-	}
+	boost::uuids::uuid getKey() const ;
 
 	/**
 	 * Get the key string of object
@@ -119,19 +100,14 @@ public:
 	 * @return std::string
 	 * 		The unique uuid tag string of this object
 	 */
-	std::string getKeyString() const {
-		return this->getUUIDString();
-	}
-
+	std::string getKeyString() const ;
 	/**
 	 * Get the tag of object
 	 *
 	 * @return boost::uuids::uuid
 	 * 		The unique uuid tag of this object
 	 */
-	boost::uuids::uuid getTag() const {
-		return this->getUUID();
-	}
+	boost::uuids::uuid getTag() const;
 
 	/**
 	 * Get the tag string of object
@@ -139,9 +115,7 @@ public:
 	 * @return std::string
 	 * 		The unique uuid tag string of this object
 	 */
-	std::string getTagString() const {
-		return this->getUUIDString();
-	}
+	std::string getTagString() const ;
 
 	//DEPRECATED
 	/**
@@ -150,9 +124,9 @@ public:
 	 * @return unsigned long ing
 	 * 		The not unique id tag of this object
 	 *
-	unsigned long int getID() const {
-		return id;
-	}*/
+	 unsigned long int getID() const {
+	 return id;
+	 }*/
 
 	/**
 	 * Assignment operator
@@ -163,20 +137,17 @@ public:
 	 * @return Tagged &
 	 * 		This object after assignment
 	 */
-	Tagged & operator=(const Tagged & obj){
-		if (&obj == this){
-			return *this;
-		}
-		this->uuid = obj.uuid;
-		return *this;
-	}
+	Tagged & operator=(const Tagged & obj);
+
+	static boost::uuids::uuid  getRandomUUID();
+
 protected:
 	/*
 	 * Unique uuid of this object
 	 *
 	 * @var boost::uuids::uuid
 	 */
-	boost::uuids::uuid uuid;
+	 boost::uuids::uuid uuid;
 
 	//DEPRECATED
 	/**
@@ -184,8 +155,10 @@ protected:
 	 *
 	 * @var unsigned long int
 	 *
-	unsigned long int id;
-	*/
+	 unsigned long int id;
+	 */
+	static boost::uuids::random_generator random_generator;
+
 };
 
 }

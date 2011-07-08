@@ -242,7 +242,7 @@ public:
 	 * @return T
 	 * 		Value at index, 0 if out of bounds
 	 */
-	virtual T operator[](unsigned index) const throw (exceptions::IndexOutOfBoundsException) {
+	virtual T operator[](unsigned int index) const throw (exceptions::IndexOutOfBoundsException) {
 
 		typename std::list<T>::const_iterator it_value;
 
@@ -254,7 +254,7 @@ public:
 		// forall in objects, find value at index
 		{
 			bool found = false;
-			int count = 0;
+			unsigned int count = 0;
 
 			typename std::list<T>::const_iterator it_objects = objects.begin();
 			const typename std::list<T>::const_iterator it_objects_end = objects.end();
