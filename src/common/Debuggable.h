@@ -21,7 +21,7 @@ public:
 	 * Default constructor
 	 */
 	Debuggable() :
-		debug(false) {
+			debug(false) {
 	}
 
 	/**
@@ -36,7 +36,7 @@ public:
 	 * @return bool
 	 * 	True if debugging on, false otherwise
 	 */
-	bool getDebug() const{
+	bool getDebug() const {
 		return debug;
 	}
 
@@ -46,17 +46,15 @@ public:
 	 * @return bool
 	 * 	True if debugging on, false otherwise
 	 */
-	bool isDebugOn() const{
+	bool isDebugOn() const {
 		return this->getDebug();
 	}
 
 	virtual void enableDebug(bool b)=0;
 
-	virtual bool checkConstraints()const{
-			return false;
-		}
-protected:
-
+	virtual bool checkConstraints() const {
+		return false;
+	}
 	/**
 	 * Set debug on or off
 	 *
@@ -66,6 +64,7 @@ protected:
 	virtual void setDebug(bool b) {
 		debug = b;
 	}
+protected:
 
 private:
 	/**

@@ -8,7 +8,6 @@
 #ifndef KEYMAPPEDCOLLECTION_H_
 #define KEYMAPPEDCOLLECTION_H_
 
-
 #include <map>
 #include <list>
 #include <boost/shared_ptr.hpp>
@@ -278,6 +277,12 @@ public:
 		return tempptr;
 	}
 
+	boost::shared_ptr<T> getMutableRandomObject() {
+		std::vector<boost::shared_ptr<T> > objlist = this->getObjectList();
+		random_shuffle(objlist.begin(), objlist.end());
+		return *(objlist.begin());
+	}
+
 	std::vector<boost::shared_ptr<T> > getRandomRange(int number) const {
 		std::vector<boost::shared_ptr<T> > objlist = this->getObjectList();
 		random_shuffle(objlist.begin(), objlist.end());
@@ -390,20 +395,18 @@ public:
 
 	virtual void enableDebug(bool b) {
 #ifdef KEYMAPPEDCOLLECTION_DEBUG
-		int count  =0;
+		int count =0;
 #endif
 		std::map<U, boost::shared_ptr<T> > & all_objects = this->objects;
 		// forall in all_objects
 		{
-			typename std::map<U, boost::shared_ptr<T> >::iterator it_all_objects =
-					all_objects.begin();
-			const typename std::map<U, boost::shared_ptr<T> >::const_iterator it_all_objects_end =
-					all_objects.end();
+			typename std::map<U, boost::shared_ptr<T> >::iterator it_all_objects = all_objects.begin();
+			const typename std::map<U, boost::shared_ptr<T> >::const_iterator it_all_objects_end = all_objects.end();
 			while (it_all_objects != it_all_objects_end) {
 				it_all_objects->second->enableDebug(true);
 				++it_all_objects;
 #ifdef KEYMAPPEDCOLLECTION_DEBUG
-		++ count ;
+				++ count;
 #endif
 			}
 		}

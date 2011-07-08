@@ -47,6 +47,7 @@ public:
 		X_AXIS, Y_AXIS_Z_AXIS
 	};
 	ActivityGrid(const int x, const int y, const int z, const int sc = 1);
+	ActivityGrid(const Point & bounding_box,  const int sc = 1);
 
 	virtual ~ActivityGrid();
 
@@ -136,7 +137,7 @@ public:
 	 * @return const std::pair<CoordinatesIntegers, double>
 	 * 	The point that was set
 	 */
-	virtual void setNearestGridPointActivity(const Point & point, const double & activity);
+	virtual void setNearestGridPointActivity(const Point & point, const double  activity);
 
 	/**
 	 * Apply an activity at a scaled point and affect nearby grid points
@@ -146,7 +147,7 @@ public:
 	 * @param double
 	 * 	The activity to set the point to
 	 */
-	void applyPointActivityToGrid(const Point & point, const double & activity,
+	void applyPointActivityToGrid(const Point & point, const double activity,
 			BoundingBox::InterpolationStyle decayStyle = BoundingBox::InterpolationStyle::INVERSE_R);
 
 	double getGridPointActivity(const CoordinatesIntegers & coords) const ;

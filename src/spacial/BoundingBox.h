@@ -28,6 +28,7 @@ public:
 	enum InterpolationStyle{
 		INVERSE_R, INVERSE_R2
 	};
+
 	enum BoxOrientation {
 		Reference,
 		FrontBottomLeft,
@@ -37,7 +38,7 @@ public:
 		FrontTopLeft,
 		FrontTopRight,
 		BackTopLeft,
-		BackTopRight,
+		BackTopRight
 	};
 	BoundingBox(const ActivityGrid  & ag, Point & pt, int depth = 1);
 	virtual ~BoundingBox();

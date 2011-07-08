@@ -29,7 +29,7 @@ public:
 	Point(const SphericalPoint & sp);
 
 	virtual ~Point();
-	double getDistance(const Point & start) const;
+	double getDistance(const Point & start = Point(0,0,0)) const;
 	void setToMinimumDistances(double min);
 
 	/**
@@ -41,6 +41,7 @@ public:
 	 * @return
 	 * 	This scaled point
 	 */
+	Point getMagnitudes()const;
 	Point getScaled(double factor) const;
 	Point getRounded() const;
 	double getX() const ;

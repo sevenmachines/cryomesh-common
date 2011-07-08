@@ -95,18 +95,18 @@ double BoundingBox::getInterpolatedActivity(const InterpolationStyle style) cons
 			double box_point_act = it_boxElements->second->getActivity();
 			double box_point_dist = it_boxElements->second->getDistance();
 			double interpolated_act;
-			if ((box_point_act >  ZERO_DELTA) || (box_point_act <  ZERO_DELTA)) {
+			if ((box_point_act >  ZERO_DELTA) || (box_point_act <  -ZERO_DELTA)) {
 				if (style == InterpolationStyle::INVERSE_R) {
 					double remove_activity = (activityGrid.getActivityDecay() * box_point_dist);
 					if (box_point_act >= 0) {
-						interpolated_act = box_point_act - remove_activity;
+						interpolated_act = std::max(0.0, (box_point_act - remove_activity));
 #ifdef BOUNDINGBOX_DEBUG
 						std::cout << "BoundingBox::getInterpolatedActivity: "
 						<< "interpolated_act = box_point_act - remove_activity -> " << interpolated_act << " = "
 						<< box_point_act << " - " << remove_activity << std::endl;
 #endif
 					} else {
-						interpolated_act = box_point_act + remove_activity;
+						interpolated_act = std::min(0.0, (box_point_act + remove_activity));
 #ifdef BOUNDINGBOX_DEBUG
 						std::cout << "BoundingBox::getInterpolatedActivity: "
 						<< "interpolated_act = box_point_act + remove_activity -> " << interpolated_act << " = "

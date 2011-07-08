@@ -32,7 +32,6 @@ Point::Point(const Coordinates<double> & coords) :
 
 }
 
-
 Point::Point(double new_x, double new_y, double new_z) :
 	x(new_x), y(new_y), z(new_z) {
 
@@ -67,6 +66,23 @@ void Point::setToMinimumDistances(double min) {
 	if (z < min) {
 		z = min;
 	}
+}
+
+Point Point::getMagnitudes() const {
+	int scale_x = 1;
+	int scale_y = 1;
+	int scale_z = 1;
+
+	if (this->x < 0) {
+		scale_x = -1;
+	}
+	if (this->y < 0) {
+		scale_y = -1;
+	}
+	if (this->z < 0) {
+		scale_z = -1;
+	}
+	return Point(this->x * scale_x, this->y * scale_y, this->z * scale_z);
 }
 
 Point Point::getScaled(double factor) const {
