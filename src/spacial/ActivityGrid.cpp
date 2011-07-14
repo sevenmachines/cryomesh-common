@@ -5,7 +5,7 @@
  *      Author: "SevenMachines <SevenMachines@yahoo.co.uk>"
  */
 
-#define ACTIVITYGRID_DEBUG
+//#define ACTIVITYGRID_DEBUG
 
 #include "ActivityGrid.h"
 #include <boost/math/special_functions/round.hpp>

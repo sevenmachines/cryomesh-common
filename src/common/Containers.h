@@ -53,8 +53,10 @@ public:
 			const typename std::multimap<U, T>::const_iterator it_mapobj_end = mapobj.end();
 			while (it_mapobj != mapobj.end()) {
 				if (result < 0 && it_mapobj->first < val) {
+#ifdef CONTAINERS_DEBUG
 					std::cout << "Containers::deleteByComparison: " << "Deleting " << it_mapobj->first << " ( < "
 							<< val << ")" << std::endl;
+#endif
 					mapobj.erase(it_mapobj->first);
 				} else if (result == 0 && it_mapobj->first == val) {
 					mapobj.erase(it_mapobj->first);
