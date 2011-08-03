@@ -78,7 +78,7 @@ public:
 		return val;
 	}
 	static bool getRandomBool(double fraction = 0.5) {
-		return getRandomDouble(0, 1) >= 0.5 ? true : false;
+		return getRandomDouble(0, 1) >= fraction ? true : false;
 	}
 
 	template<class T>

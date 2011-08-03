@@ -55,6 +55,9 @@ public:
 	Tagged() ;
 
 	Tagged(const Tagged & obj);
+
+	Tagged(const boost::uuids::uuid obj_uuid) ;
+
 	/**
 	 * Destructor
 	 *

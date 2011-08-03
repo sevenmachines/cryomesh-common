@@ -403,7 +403,7 @@ public:
 			typename std::map<U, boost::shared_ptr<T> >::iterator it_all_objects = all_objects.begin();
 			const typename std::map<U, boost::shared_ptr<T> >::const_iterator it_all_objects_end = all_objects.end();
 			while (it_all_objects != it_all_objects_end) {
-				it_all_objects->second->enableDebug(true);
+				it_all_objects->second->enableDebug(b);
 				++it_all_objects;
 #ifdef KEYMAPPEDCOLLECTION_DEBUG
 				++ count;

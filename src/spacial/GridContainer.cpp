@@ -15,7 +15,8 @@ namespace spacial {
 GridContainer::GridContainer() {
 }
 GridContainer::GridContainer(const Point & point, const double val) {
-	this->setBoundingBox(point, val);
+	this->setBoundingBox(point);
+	this->clear(val);
 }
 GridContainer::~GridContainer() {
 	// TODO Auto-generated destructor stub
@@ -35,7 +36,7 @@ void GridContainer::clear(double d) {
 		}
 	}
 }
-void GridContainer::setBoundingBox(const Point & point, const double val) {
+void GridContainer::setBoundingBox(const Point & point) {
 	boundingBox = point.getMagnitudes();
 }
 

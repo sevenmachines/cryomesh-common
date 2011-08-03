@@ -179,8 +179,7 @@ public:
 	void compareGridPoints(const ActivityGrid & grid_comp, int & equal_to, int & greater_than, int & less_than,
 			int & not_known) const;
 	void
-			compareGridPoints(const double comp_act, int & equal_to, int & greater_than, int & less_than,
-					int & not_known) const;
+			compareGridPoints(const double comp_act, int & equal_to, int & greater_than, int & less_than) const;
 
 	double getActivitySummation() const;
 

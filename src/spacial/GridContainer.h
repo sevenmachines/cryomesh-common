@@ -27,7 +27,7 @@ public:
 	GridContainer(const Point & point, const double val = 0.0);
 	virtual ~GridContainer();
 	void clear(double d) ;
-	void setBoundingBox(const Point & point, const double val = 0.0) ;
+	void setBoundingBox(const Point & point) ;
 
 	double getValue(const Coordinates<int> & coords) const ;
 	void setValue(const Coordinates<int> & coords, const double val);

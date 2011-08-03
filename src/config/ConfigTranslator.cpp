@@ -6,13 +6,12 @@
  */
 
 //#define CONFIGTRANSLATOR_DEBUG
-
 #include "ConfigTranslator.h"
 
 namespace cryomesh {
 
 namespace config {
-ConfigTranslator::ConfigTranslator( std::istream & is) {
+ConfigTranslator::ConfigTranslator(std::istream & is) {
 	// open file
 	this->readRawEntries(is);
 }
@@ -45,7 +44,7 @@ ConfigEntry ConfigTranslator::getConfigEntryByCommand(const std::string & com) c
 	return tempent;
 }
 
-void ConfigTranslator::readRawEntries( std::istream & fs) {
+void ConfigTranslator::readRawEntries(std::istream & fs) {
 	std::string line;
 	while (fs.good() == true) {
 		getline(fs, line);
@@ -63,8 +62,20 @@ void ConfigTranslator::readRawEntries( std::istream & fs) {
 	}
 }
 
-void ConfigTranslator::writeRawEntries(std::ostream & os) {
-
+std::ostream &  ConfigTranslator::writeRawEntries(std::ostream & os) {
+	// forall in entries
+	{
+		std::list<ConfigEntry>::const_iterator it_entries = entries.begin();
+		const std::list<ConfigEntry>::const_iterator it_entries_end = entries.end();
+		while (it_entries != it_entries_end) {
+			os << *it_entries;
+			if (it_entries != it_entries_end) {
+				os << std::endl;
+			}
+			++it_entries;
+		}
+	}
+	return os;
 }
 
 const std::list<ConfigEntry> & ConfigTranslator::getEntries() const {
@@ -84,6 +95,6 @@ std::ostream& operator<<(std::ostream & os, const ConfigTranslator & obj) {
 	return os;
 }
 
-}//NAMESPACE
+} //NAMESPACE
 
-}//NAMESPACE
+} //NAMESPACE

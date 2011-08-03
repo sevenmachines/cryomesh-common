@@ -26,7 +26,9 @@ uuid(Tagged::getRandomUUID()) {
 Tagged::Tagged(const Tagged & obj) {
 	this->uuid = obj.uuid;
 }
-
+Tagged::Tagged(const boost::uuids::uuid obj_uuid) {
+	this->uuid = obj_uuid;
+}
 Tagged::~Tagged() {
 
 }

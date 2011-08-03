@@ -35,7 +35,7 @@ double ActivityGrid::getInterpolatedActivity(const Point & point, int depth,
 	// get rescaled point
 	Point rescaled_point = point.getScaled( (double) this->getScale());
 	boost::shared_ptr<BoundingBox> temp_box = this->getBoundingBox(rescaled_point, depth);
-	double interpolated_act = temp_box->getInterpolatedActivity();
+	double interpolated_act = temp_box->getInterpolatedActivity(style);
 #ifdef ACTIVITYGRID_DEBUG
 	std::cout << "ActivityGrid::getInterpolatedActivity: " << "point: "<<point<<" level: " << depth << " interpolated_act: "
 			<< interpolated_act << std::endl;
@@ -468,8 +468,7 @@ void ActivityGrid::compareGridPoints(const ActivityGrid & grid_comp, int & equal
 	}
 }
 
-void ActivityGrid::compareGridPoints(const double comp_act, int & equal_to, int & greater_than, int & less_than,
-		int & not_known) const {
+void ActivityGrid::compareGridPoints(const double comp_act, int & equal_to, int & greater_than, int & less_than) const {
 	// forall in activityGrid
 	{
 		GridContainer::const_iterator it_activityGrid = activityGrid.begin();

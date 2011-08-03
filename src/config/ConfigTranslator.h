@@ -54,9 +54,9 @@ protected:
 	void readRawEntries(std::istream & os);
 
 	/**
-	 * write out raw entries from a stream
+	 * write out raw entries to a stream
 	 */
-	void writeRawEntries(std::ostream & os);
+	std::ostream & writeRawEntries(std::ostream & os);
 
 private:
 	/**
