@@ -157,8 +157,9 @@ protected:
 	 *
 	 unsigned long int id;
 	 */
-	static boost::uuids::random_generator random_generator;
 
+	static boost::mt19937 randomMersenne;
+	static boost::uuids::basic_random_generator<boost::mt19937> randomUUID;
 };
 
 }

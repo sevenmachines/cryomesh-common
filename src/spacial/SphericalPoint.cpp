@@ -54,7 +54,6 @@ double SphericalPoint::getArcLength(const SphericalPoint & start) const {
 double SphericalPoint::getArcLengthBasic(const SphericalPoint & start) const {
 	// use haversine equation
 	Radian new_phi = this->getPhi() - start.getPhi();
-	double degrees = new_phi.toDegrees();
 	double delta_phi = new_phi.getValue();
 	double p1 = sin(start.getTheta().getValue()) * sin(this->getTheta().getValue());
 	double p2 = cos(start.getTheta().getValue()) * cos(this->getTheta().getValue());
@@ -70,11 +69,9 @@ double SphericalPoint::getArcLengthHaversine(const SphericalPoint & start) const
 	if (start.equals( this->getOpposite())){
 		return PI * this->getRadius();
 	}
-	double phi_f = this->getPhi().getValue();
-	double phi_s = start.getPhi().getValue();
+
 
 	double delta_phi = ( this->getPhi() - start.getPhi() ).getValue();
-	double degrees = Radian(delta_phi).toDegrees();
 	double sine_delta_phi = sin(delta_phi);
 	double cos_delta_phi = cos(delta_phi);
 

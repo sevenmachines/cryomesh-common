@@ -1,14 +1,7 @@
 
-**** Build of configuration Release for project cryomesh-common ****
+**** Build of configuration Debug for project cryomesh-common ****
 
 make all 
-Building file: ../src/spacial/ActivityGrid.cpp
-Invoking: GCC C++ Compiler
-g++ -I"/home/niall/Projects/Eclipse/CPP/cryomesh-common/src" -O2 -Wall -c -fmessage-length=0 -fPIC -std=c++0x -MMD -MP -MF"src/spacial/ActivityGrid.d" -MT"src/spacial/ActivityGrid.d" -o"src/spacial/ActivityGrid.o" "../src/spacial/ActivityGrid.cpp"
-Finished building: ../src/spacial/ActivityGrid.cpp
- 
-Building target: libcryomesh-common.so
-Invoking: GCC C++ Linker
-g++ -std=c++0x -shared -o"libcryomesh-common.so"  ./src/spacial/ActivityGrid.o ./src/spacial/BoundingBox.o ./src/spacial/Degree.o ./src/spacial/GridContainer.o ./src/spacial/Point.o ./src/spacial/Radian.o ./src/spacial/SphericalPoint.o  ./src/networking/BasicServer.o ./src/networking/ICommunication.o  ./src/config/ConfigEntry.o ./src/config/ConfigTranslator.o  ./src/common/Misc.o ./src/common/Tagged.o   -lm
-Finished building target: libcryomesh-common.so
- 
+make: Nothing to be done for `all'.
+
+**** Build Finished ****

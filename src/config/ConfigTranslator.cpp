@@ -53,8 +53,7 @@ void ConfigTranslator::readRawEntries( std::istream & fs) {
 		std::cout << "ConfigTranslator::readRawEntries: " << line << std::endl;
 #endif
 		// ignore comment lines
-		int first_hash = line.find_first_of('#', 0);
-		int first_char_pos = line.find_first_not_of(' ');
+		size_t first_char_pos = line.find_first_not_of(' ');
 		if (first_char_pos != std::string::npos) {
 			std::string first_char = line.substr(first_char_pos, 1);
 			if (first_char != "#") {

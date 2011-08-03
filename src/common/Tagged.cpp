@@ -11,10 +11,11 @@ namespace cryomesh {
 
 namespace common {
 
-boost::uuids::random_generator Tagged::random_generator;
+ boost::mt19937 Tagged::randomMersenne;
+	 boost::uuids::basic_random_generator<boost::mt19937> Tagged::randomUUID (&Tagged::randomMersenne);
 
  boost::uuids::uuid Tagged::getRandomUUID() {
-	return Tagged::random_generator();
+	return randomUUID();
 }
 
 Tagged::Tagged() :

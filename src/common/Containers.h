@@ -50,7 +50,6 @@ public:
 		// forall in mapobj
 		{
 			typename std::multimap<U, T>::iterator it_mapobj = mapobj.begin();
-			const typename std::multimap<U, T>::const_iterator it_mapobj_end = mapobj.end();
 			while (it_mapobj != mapobj.end()) {
 				if (result < 0 && it_mapobj->first < val) {
 #ifdef CONTAINERS_DEBUG
@@ -316,7 +315,6 @@ public:
 		// forall in lhs
 		{
 			typename T::iterator it_lhs = lhs.begin();
-			const typename T::const_iterator it_lhs_end = lhs.end();
 			typename T::const_iterator it_rhs = rhs.begin();
 			const typename T::const_iterator it_rhs_end = rhs.end();
 			while (it_rhs != it_rhs_end) {

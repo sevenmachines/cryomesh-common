@@ -182,11 +182,11 @@ std::pair<std::string, std::string> ConfigEntry::extractOptionPair(const std::st
 	std::string remaining_text = boost::trim_left_copy(rawtext);
 
 	std::string temp_opt = "";
-	int first_quote = rawtext.find_first_of('"');
-	int second_quote = rawtext.find_first_of('"', first_quote + 1);
-	int first_eq = rawtext.find_first_of('=');
-	int second_eq = rawtext.find_first_of('=', first_eq + 1);
-	int first_space = rawtext.find_first_of(' ');
+	size_t first_quote = rawtext.find_first_of('"');
+	size_t second_quote = rawtext.find_first_of('"', first_quote + 1);
+	size_t first_eq = rawtext.find_first_of('=');
+	size_t second_eq = rawtext.find_first_of('=', first_eq + 1);
+	size_t first_space = rawtext.find_first_of(' ');
 
 	//std::cout << "ConfigEntry::extractOptionPair: " << "first_quote " << first_quote << "second_quote " << second_quote
 	//		<< "first_eq " << first_eq << "second_eq " << second_eq << "first_space " << first_space << std::endl;

@@ -340,7 +340,6 @@ void ActivityGrid::shrinkDimensions(const CoordinatesIntegers & coords) {
 	// forall in activityGrid
 	{
 		GridContainer::iterator it_activityGrid = activityGrid.begin();
-		const GridContainer::const_iterator it_activityGrid_end = activityGrid.end();
 		while (it_activityGrid != activityGrid.end()) {
 			int temp_x = it_activityGrid->first.getX();
 			int temp_y = it_activityGrid->first.getY();
