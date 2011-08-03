@@ -332,7 +332,7 @@ public:
 	 * @return int
 	 * 		The collections size
 	 */
-	virtual int getSize() const {
+	virtual size_t getSize() const {
 		return objects.size();
 	}
 
