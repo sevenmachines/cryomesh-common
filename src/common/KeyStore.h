@@ -9,7 +9,7 @@
 #define KEYSTORE_H_
 
 #include <map>
-
+#include <cstring>
 namespace cryomesh {
 
 namespace common {
