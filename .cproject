@@ -30,7 +30,7 @@
 							<tool id="cdt.managedbuild.tool.gnu.archiver.base.1524901073" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base"/>
 							<tool command="/usr/bin/g++" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG}${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" id="cdt.managedbuild.tool.gnu.cpp.compiler.so.debug.163668634" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.so.debug">
 								<option id="gnu.cpp.compiler.so.debug.option.optimization.level.2058945015" name="Optimization Level" superClass="gnu.cpp.compiler.so.debug.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.so.debug.option.debugging.level.197843264" name="Debug Level" superClass="gnu.cpp.compiler.so.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.default" valueType="enumerated"/>
+								<option id="gnu.cpp.compiler.so.debug.option.debugging.level.197843264" name="Debug Level" superClass="gnu.cpp.compiler.so.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.include.paths.819847734" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
 								</option>
@@ -42,6 +42,8 @@
 								<option id="gnu.cpp.compiler.option.warnings.pedantic.1831064889" name="Pedantic (-pedantic)" superClass="gnu.cpp.compiler.option.warnings.pedantic" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.warnings.pedantic.error.322475047" name="Pedantic warnings as errors (-pedantic-errors)" superClass="gnu.cpp.compiler.option.warnings.pedantic.error" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.warnings.toerrors.2024744893" name="Warnings as errors (-Werror)" superClass="gnu.cpp.compiler.option.warnings.toerrors" value="true" valueType="boolean"/>
+								<option id="gnu.cpp.compiler.option.debugging.prof.198935562" name="Generate prof information (-p)" superClass="gnu.cpp.compiler.option.debugging.prof" value="true" valueType="boolean"/>
+								<option id="gnu.cpp.compiler.option.debugging.gprof.752315878" name="Generate gprof information (-pg)" superClass="gnu.cpp.compiler.option.debugging.gprof" value="true" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.952009060" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.so.debug.1616409385" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.so.debug">
@@ -58,6 +60,8 @@
 									<listOptionValue builtIn="false" value="m"/>
 								</option>
 								<option id="gnu.cpp.link.option.flags.854825821" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-std=c++0x" valueType="string"/>
+								<option id="gnu.cpp.link.option.debugging.prof.1965039864" superClass="gnu.cpp.link.option.debugging.prof" value="true" valueType="boolean"/>
+								<option id="gnu.cpp.link.option.debugging.gprof.221394905" superClass="gnu.cpp.link.option.debugging.gprof" value="true" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.2078021726" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -116,8 +120,8 @@
 								<option id="gnu.cpp.compiler.option.other.other.1659444478" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -fPIC -std=c++0x -W" valueType="string"/>
 								<option id="gnu.cpp.compiler.option.other.verbose.902596070" name="Verbose (-v)" superClass="gnu.cpp.compiler.option.other.verbose" value="false" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.warnings.pedantic.1859401733" name="Pedantic (-pedantic)" superClass="gnu.cpp.compiler.option.warnings.pedantic" value="true" valueType="boolean"/>
-								<option id="gnu.cpp.compiler.option.warnings.pedantic.error.1498907294" superClass="gnu.cpp.compiler.option.warnings.pedantic.error" value="true" valueType="boolean"/>
-								<option id="gnu.cpp.compiler.option.warnings.toerrors.2112129186" superClass="gnu.cpp.compiler.option.warnings.toerrors" value="true" valueType="boolean"/>
+								<option id="gnu.cpp.compiler.option.warnings.pedantic.error.1498907294" name="Pedantic warnings as errors (-pedantic-errors)" superClass="gnu.cpp.compiler.option.warnings.pedantic.error" value="true" valueType="boolean"/>
+								<option id="gnu.cpp.compiler.option.warnings.toerrors.2112129186" name="Warnings as errors (-Werror)" superClass="gnu.cpp.compiler.option.warnings.toerrors" value="true" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.498166802" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.so.release.1096914717" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.so.release">

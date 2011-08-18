@@ -106,7 +106,7 @@ public:
 	 * @param U
 	 * 	Key to search for
 	 */
-	virtual const typename std::map<U, T>::iterator get(const U & key) {
+	virtual inline const typename std::map<U, T>::iterator get(const U & key) {
 		typename std::map<U, T>::iterator it_temp = this->getNullEntry();
 		typename std::map<U, T>::iterator it_found = objects.find(key);
 		if (it_found != objects.end()) {

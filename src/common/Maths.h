@@ -96,6 +96,15 @@ public:
 #endif
 		return val;
 	}
+
+	template <class T>
+	static T absolute(const T & obj){
+		T new_obj(obj);
+		if ( obj < 0){
+			new_obj = -new_obj;
+		}
+		return  new_obj;
+	}
 };
 
 }
