@@ -6,7 +6,6 @@
  */
 
 //#define POINT_DEBUG
-
 #include "Point.h"
 #include "SphericalPoint.h"
 #include "Coordinates.h"
@@ -18,26 +17,26 @@ namespace cryomesh {
 namespace spacial {
 
 Point::Point() :
-	x(0), y(0), z(0) {
+		x(0), y(0), z(0) {
 
 }
 
 Point::Point(const Coordinates<int> & coords) :
-	x(coords.getX()), y(coords.getY()), z(coords.getZ()) {
+		x(coords.getX()), y(coords.getY()), z(coords.getZ()) {
 
 }
 
 Point::Point(const Coordinates<double> & coords) :
-	x(coords.getX()), y(coords.getY()), z(coords.getZ()) {
+		x(coords.getX()), y(coords.getY()), z(coords.getZ()) {
 
 }
 
 Point::Point(double new_x, double new_y, double new_z) :
-	x(new_x), y(new_y), z(new_z) {
+		x(new_x), y(new_y), z(new_z) {
 
 }
 Point::Point(const Point & sp) :
-	x(sp.getX()), y(sp.getY()), z(sp.getZ()) {
+		x(sp.getX()), y(sp.getY()), z(sp.getZ()) {
 }
 Point::Point(const SphericalPoint & sp) {
 	x = sp.getRadius() * (sin(sp.getTheta().getValue()) * cos(sp.getPhi().getValue()));
@@ -103,6 +102,16 @@ double Point::getZ() const {
 	return z;
 }
 
+void Point::setX(double d) {
+	this->x = d;
+}
+void Point::setY(double d) {
+	this->y = d;
+}
+void Point::setZ(double d) {
+	this ->z = d;
+}
+
 Point Point::getNormalisedVector() const {
 	// get distance to origin
 	double dist = (*this).getDistance(Point(0, 0, 0));
@@ -151,6 +160,6 @@ std::ostream & operator<<(std::ostream& os, const Point & obj) {
 	return os;
 
 }
-}//NAMESPACE
+} //NAMESPACE
 
-}//NAMESPACE
+} //NAMESPACE

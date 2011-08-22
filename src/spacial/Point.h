@@ -21,15 +21,15 @@ class SphericalPoint;
 class Point {
 public:
 	Point();
-	Point(const Coordinates<int> & coords );
-	Point(const Coordinates<double> & coords );
+	Point(const Coordinates<int> & coords);
+	Point(const Coordinates<double> & coords);
 
 	Point(double new_x, double new_y, double new_z);
 	Point(const Point & sp);
 	Point(const SphericalPoint & sp);
 
 	virtual ~Point();
-	double getDistance(const Point & start = Point(0,0,0)) const;
+	double getDistance(const Point & start = Point(0, 0, 0)) const;
 	void setToMinimumDistances(double min);
 
 	/**
@@ -41,12 +41,17 @@ public:
 	 * @return
 	 * 	This scaled point
 	 */
-	Point getMagnitudes()const;
+	Point getMagnitudes() const;
 	Point getScaled(double factor) const;
 	Point getRounded() const;
-	double getX() const ;
+	double getX() const;
 	double getY() const;
 	double getZ() const;
+
+	void setX(double d);
+	void setY(double d);
+	void setZ(double d);
+
 	/*
 	 * get  a normalised vector
 	 */
