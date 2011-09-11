@@ -31,7 +31,7 @@ public:
 	/**
 	 * Default constructor
 	 */
-	SimpleCollection() {
+	SimpleCollection() : objects(){
 	}
 
 	/**
@@ -50,7 +50,7 @@ public:
 	 * @param std::list<T> list
 	 * 		The list values to be added to the collection
 	 */
-	SimpleCollection(const std::list<T> & list) {
+	SimpleCollection(const std::list<T> & list) : objects() {
 		this->add(list);
 	}
 

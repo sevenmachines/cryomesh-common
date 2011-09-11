@@ -26,7 +26,7 @@ public:
 	 *
 	 *		Constructor for Collection<U,T>
 	 */
-	KeyMappedCollection() {
+	KeyMappedCollection() : objects(){
 
 	}
 
