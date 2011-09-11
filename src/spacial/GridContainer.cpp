@@ -12,9 +12,9 @@ namespace cryomesh {
 
 namespace spacial {
 
-GridContainer::GridContainer() {
+GridContainer::GridContainer() : boundingBox(), values(){
 }
-GridContainer::GridContainer(const Point & point, const double val) {
+GridContainer::GridContainer(const Point & point, const double val) : boundingBox(), values(){
 	this->setBoundingBox(point);
 	this->clear(val);
 }
@@ -24,9 +24,9 @@ GridContainer::~GridContainer() {
 
 void GridContainer::clear(double d) {
 	values.clear();
-	int bx = (int)(boundingBox.getX() + 0.5);
-	int by = (int)(boundingBox.getY() + 0.5);
-	int bz = (int)(boundingBox.getZ() + 0.5);
+	int bx = static_cast<int>((boundingBox.getX() + 0.5));
+	int by = static_cast<int>((boundingBox.getY() + 0.5));
+	int bz = static_cast<int>((boundingBox.getZ() + 0.5));
 
 	for (int i = 0; i< bx; i++) {
 		for (int j = 0; i< by; j++) {

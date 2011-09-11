@@ -20,15 +20,13 @@ namespace spacial {
 template<class T>
 class Coordinates {
 public:
-	Coordinates() {
-		coords = boost::tuple<T, T, T>(0, 0, 0);
+	Coordinates() : coords(boost::tuple<T, T, T>(0, 0, 0)){
 	}
 
-	Coordinates(const Coordinates<T> & obj) {
-		coords = boost::tuple<T, T, T>(obj.getX(), obj.getY(), obj.getZ());
+	Coordinates(const Coordinates<T> & obj):coords(boost::tuple<T, T, T>(obj.getX(), obj.getY(), obj.getZ())) {
+
 	}
-	Coordinates(const T x, const T y, const T z) {
-		coords = boost::tuple<T, T, T>(x, y, z);
+	Coordinates(const T x, const T y, const T z) :coords (boost::tuple<T, T, T>(x, y, z)) {
 
 	}
 	~Coordinates() {

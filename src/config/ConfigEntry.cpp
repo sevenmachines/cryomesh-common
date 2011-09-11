@@ -20,7 +20,7 @@ namespace cryomesh {
 namespace config {
 
 ConfigEntry::ConfigEntry(const std::string & rawline) :
-	rawEntry(rawline) {
+		command(), options(), rawEntry(rawline) {
 	parseEntry();
 }
 

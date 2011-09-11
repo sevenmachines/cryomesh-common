@@ -21,7 +21,7 @@ typedef std::map<Coordinates<int>, double > GridStorage;
 typedef std::map<Coordinates<int>, double >::iterator GridStorageIterator;
 typedef std::map<Coordinates<int>, double >::const_iterator GridStorageConstIterator;
 
-class GridContainer : public std::vector<double> {
+class GridContainer {
 public:
 	GridContainer();
 	GridContainer(const Point & point, const double val = 0.0);
@@ -35,7 +35,6 @@ public:
 	const GridStorage & getValues()const;
 
 protected:
-
 	Point boundingBox;
 	GridStorage values;
 };

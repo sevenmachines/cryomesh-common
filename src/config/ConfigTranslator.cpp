@@ -11,11 +11,11 @@
 namespace cryomesh {
 
 namespace config {
-ConfigTranslator::ConfigTranslator(std::istream & is) {
+ConfigTranslator::ConfigTranslator(std::istream & is) : entries() {
 	// open file
 	this->readRawEntries(is);
 }
-ConfigTranslator::ConfigTranslator(const std::string & filename) {
+ConfigTranslator::ConfigTranslator(const std::string & filename) : entries() {
 	// open file
 	std::ifstream ifs(filename.c_str());
 	if (ifs.is_open() == true) {

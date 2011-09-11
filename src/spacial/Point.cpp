@@ -38,17 +38,17 @@ Point::Point(double new_x, double new_y, double new_z) :
 Point::Point(const Point & sp) :
 		x(sp.getX()), y(sp.getY()), z(sp.getZ()) {
 }
-Point::Point(const SphericalPoint & sp) {
-	x = sp.getRadius() * (sin(sp.getTheta().getValue()) * cos(sp.getPhi().getValue()));
-	y = sp.getRadius() * (sin(sp.getTheta().getValue()) * sin(sp.getPhi().getValue()));
-	z = sp.getRadius() * cos(sp.getTheta().getValue());
+Point::Point(const SphericalPoint & sp) :
+		x(sp.getRadius() * (sin(sp.getTheta().getValue()) * cos(sp.getPhi().getValue()))), y(
+				sp.getRadius() * (sin(sp.getTheta().getValue()) * sin(sp.getPhi().getValue()))), z(
+				sp.getRadius() * cos(sp.getTheta().getValue())) {
 }
 Point::~Point() {
 }
 double Point::getDistance(const Point & start) const {
-	double p1 = (double) x - start.getX();
-	double p2 = (double) y - start.getY();
-	double p3 = (double) z - start.getZ();
+	double p1 = static_cast<double>( x - start.getX());
+	double p2 = static_cast<double>( y - start.getY());
+	double p3 = static_cast<double>(z - start.getZ());
 #ifdef POINT_DEBUG
 	std::cout<<"Point::getDistance: "<<"p1,p2,p3: "<< p1<<", "<<p2<<", "<<p3<<std::endl;
 #endif
@@ -109,7 +109,7 @@ void Point::setY(double d) {
 	this->y = d;
 }
 void Point::setZ(double d) {
-	this ->z = d;
+	this->z = d;
 }
 
 Point Point::getNormalisedVector() const {

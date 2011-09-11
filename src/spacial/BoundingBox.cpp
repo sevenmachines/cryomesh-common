@@ -16,7 +16,7 @@ namespace cryomesh {
 namespace spacial {
 
 BoundingBox::BoundingBox(const ActivityGrid & ag, Point & pt, int depth) :
-	activityGrid(ag) {
+	activityGrid(ag), boxElements (){
 	const Coordinates<int> & coords = activityGrid.getBoundingUnitCoordinates();
 	int gridX = coords.getX();
 	int gridY = coords.getY();
@@ -28,9 +28,9 @@ BoundingBox::BoundingBox(const ActivityGrid & ag, Point & pt, int depth) :
 				<< ", " << gridY << ", " << gridZ << ")" << std::endl;
 	} else {
 
-		int round_x = (int) (pt.getX()) - (depth - 1);
-		int round_y = (int) (pt.getY()) - (depth - 1);
-		int round_z = (int) (pt.getZ()) - (depth - 1);
+		int round_x = static_cast<int>((pt.getX()) - (depth - 1));
+		int round_y =  static_cast<int>((pt.getY()) - (depth - 1));
+		int round_z =  static_cast<int>( (pt.getZ()) - (depth - 1));
 
 #ifdef BOUNDINGBOX_DEBUG
 		std::cout << "BoundingBox::BoundingBox: " << "building from point (" << pt.getX() << ", " << pt.getY() << ", "

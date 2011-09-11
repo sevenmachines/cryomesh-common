@@ -11,23 +11,21 @@ namespace cryomesh {
 
 namespace common {
 
- boost::mt19937 Tagged::randomMersenne;
-	 boost::uuids::basic_random_generator<boost::mt19937> Tagged::randomUUID (&Tagged::randomMersenne);
+boost::mt19937 Tagged::randomMersenne;
+boost::uuids::basic_random_generator<boost::mt19937> Tagged::randomUUID(&Tagged::randomMersenne);
 
- boost::uuids::uuid Tagged::getRandomUUID() {
+boost::uuids::uuid Tagged::getRandomUUID() {
 	return randomUUID();
 }
 
 Tagged::Tagged() :
-uuid(Tagged::getRandomUUID()) {
+		uuid(Tagged::getRandomUUID()) {
 
 }
 
-Tagged::Tagged(const Tagged & obj) {
-	this->uuid = obj.uuid;
+Tagged::Tagged(const Tagged & obj) :  uuid (obj.uuid) {
 }
-Tagged::Tagged(const boost::uuids::uuid obj_uuid) {
-	this->uuid = obj_uuid;
+Tagged::Tagged(const boost::uuids::uuid obj_uuid) :  uuid (obj_uuid) {
 }
 Tagged::~Tagged() {
 
@@ -73,5 +71,5 @@ Tagged & Tagged::operator=(const Tagged & obj) {
 	this->uuid = obj.uuid;
 	return *this;
 }
-}//NAMESPACE
-}//NAMESPACE
+} //NAMESPACE
+} //NAMESPACE

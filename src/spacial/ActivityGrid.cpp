@@ -15,13 +15,13 @@ namespace cryomesh {
 namespace spacial {
 
 ActivityGrid::ActivityGrid(const int x, const int y, const int z, const int sc) :
-	activityDecay(1), scale(sc), MIN_SCALE(1), MAX_SCALE(1000), ACTIVITY_DECAY_CUTOFF(0.01) {
+		boundingUnitCoordinates(), activityDecay(1), scale(sc), MIN_SCALE(1), MAX_SCALE(1000), ACTIVITY_DECAY_CUTOFF(0.01) , activityGrid(){
 	common::Maths::clamp(scale, MIN_SCALE, MAX_SCALE);
 	this->setBoundingBox(CoordinatesIntegers(x, y, z));
 }
 
 ActivityGrid::ActivityGrid(const Point & bounding_box, const int sc) :
-	activityDecay(1), scale(sc), MIN_SCALE(1), MAX_SCALE(1000), ACTIVITY_DECAY_CUTOFF(0.01) {
+		boundingUnitCoordinates(),activityDecay(1), scale(sc), MIN_SCALE(1), MAX_SCALE(1000), ACTIVITY_DECAY_CUTOFF(0.01) , activityGrid(){
 	common::Maths::clamp(scale, MIN_SCALE, MAX_SCALE);
 	this->setBoundingBox(CoordinatesIntegers(bounding_box.getX(), bounding_box.getY(), bounding_box.getZ()));
 }
@@ -33,7 +33,7 @@ ActivityGrid::~ActivityGrid() {
 double ActivityGrid::getInterpolatedActivity(const Point & point, int depth,
 		const BoundingBox::InterpolationStyle style) {
 	// get rescaled point
-	Point rescaled_point = point.getScaled( (double) this->getScale());
+	Point rescaled_point = point.getScaled( static_cast<double>(this->getScale()));
 	boost::shared_ptr<BoundingBox> temp_box = this->getBoundingBox(rescaled_point, depth);
 	double interpolated_act = temp_box->getInterpolatedActivity(style);
 #ifdef ACTIVITYGRID_DEBUG
@@ -46,14 +46,14 @@ double ActivityGrid::getInterpolatedActivity(const Point & point, int depth,
 ActivityGrid::GridContainer::iterator ActivityGrid::getNearestGridPoint(const Point & point) {
 	ActivityGrid::GridContainer::iterator it_found;
 	if (activityGrid.size() > 0) {
-		const Point rescaled_point = point.getScaled((double) this->getScale());
+		const Point rescaled_point = point.getScaled(static_cast<double>(this->getScale()));
 		const Point grid_point = rescaled_point.getRounded();
 		int grid_x = std::min((boundingUnitCoordinates.getX() - 1),
-				std::max(0, (int) boost::math::round(rescaled_point.getX())));
+				std::max(0,static_cast<int>( boost::math::round(rescaled_point.getX()))));
 		int grid_y = std::min((boundingUnitCoordinates.getY() - 1),
-				std::max(0, (int) boost::math::round(rescaled_point.getY())));
+				std::max(0, static_cast<int>( boost::math::round(rescaled_point.getY()))));
 		int grid_z = std::min((boundingUnitCoordinates.getZ() - 1),
-				std::max(0, (int) boost::math::round(rescaled_point.getZ())));
+				std::max(0, static_cast<int>(  boost::math::round(rescaled_point.getZ()))));
 		CoordinatesIntegers coords(grid_x, grid_y, grid_z);
 		it_found = this->findMutableGridCoordinate(coords);
 		if (it_found == activityGrid.end()) {
@@ -67,7 +67,7 @@ ActivityGrid::GridContainer::iterator ActivityGrid::getNearestGridPoint(const Po
 
 const std::pair<ActivityGrid::CoordinatesIntegers, double> ActivityGrid::getNearestGridPointActivity(
 		const Point & point) const {
-	const Point rescaled_point = point.getScaled((double) this->getScale());
+	const Point rescaled_point = point.getScaled(static_cast<double>( this->getScale()));
 	const Point grid_point = rescaled_point.getRounded();
 	CoordinatesIntegers coords(grid_point.getX(), grid_point.getY(), grid_point.getZ());
 	double grid_act = this->getGridPointActivity(coords);
@@ -75,7 +75,7 @@ const std::pair<ActivityGrid::CoordinatesIntegers, double> ActivityGrid::getNear
 }
 void ActivityGrid::setNearestGridPointActivity(const Point & point, const double act) {
 	// get rescaled point
-	Point rescaled_point = point.getScaled((double) this->getScale());
+	Point rescaled_point = point.getScaled(static_cast<double>( this->getScale()));
 	Point grid_point = rescaled_point.getRounded();
 	CoordinatesIntegers coords(grid_point.getX(), grid_point.getY(), grid_point.getZ());
 	this->setGridPointActivity(coords, act);
@@ -84,7 +84,7 @@ void ActivityGrid::setNearestGridPointActivity(const Point & point, const double
 void ActivityGrid::applyPointActivityToGrid(const Point & point, const double activity,
 		BoundingBox::InterpolationStyle decayStyle) {
 	// get bounding boxes and apply until the whole box falls below threshold
-	Point rescaled_point = point.getScaled((double) this->getScale());
+	Point rescaled_point = point.getScaled(static_cast<double>( this->getScale()));
 
 	// get corner point
 
@@ -364,7 +364,7 @@ void ActivityGrid::setScale(const int new_scale) {
 }
 
 double ActivityGrid::getUnitFromScaledDistance(double d) const {
-	return d / (double) this->getScale();
+	return d / static_cast<double>(this->getScale());
 }
 
 double ActivityGrid::getScaledFromUnitDistance(int d) const {
@@ -662,7 +662,7 @@ ActivityGrid::applyPointActivityToGridPoint(const Point & source, const double s
 	if (source_activity != 0) {
 		// calculate applied activity
 		Point dest(sink.first.getX(), sink.first.getY(), sink.first.getZ());
-		double actual_decay_per_grid_unit = activityDecay / (double) this->getScale();
+		double actual_decay_per_grid_unit = activityDecay / static_cast<double>( this->getScale());
 		double act_mod;
 		if (decayStyle == BoundingBox::InterpolationStyle::INVERSE_R) {
 			act_mod = source_activity - (source.getDistance(dest) * actual_decay_per_grid_unit);

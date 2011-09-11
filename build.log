@@ -2,6 +2,15 @@
 **** Build of configuration Debug for project cryomesh-common ****
 
 make all 
-make: Nothing to be done for `all'.
+Building file: ../src/common/Tagged.cpp
+Invoking: GCC C++ Compiler
+/usr/bin/g++ -DCUTE_DEBUG -I"/home/niall/Projects/Eclipse/CPP/cryomesh-common/src" -O0 -g3 -p -pg -pedantic -pedantic-errors -Wall -Werror -c -fmessage-length=0 -fPIC -std=c++0x -W -Wextra -Wwrite-strings -Woverloaded-virtual -Weffc++ -Wold-style-cast -p -pg -pedantic -pedantic-errors -Wall -Werror -MMD -MP -MF"src/common/Tagged.d" -MT"src/common/Tagged.d" -o"src/common/Tagged.o" "../src/common/Tagged.cpp"
+Finished building: ../src/common/Tagged.cpp
+ 
+Building target: libcryomesh-common.so
+Invoking: GCC C++ Linker
+/usr/bin/g++ -std=c++0x -shared -p -pg -o "libcryomesh-common.so"  ./src/spacial/ActivityGrid.o ./src/spacial/BoundingBox.o ./src/spacial/Degree.o ./src/spacial/GridContainer.o ./src/spacial/Point.o ./src/spacial/Radian.o ./src/spacial/SphericalPoint.o  ./src/networking/BasicServer.o ./src/networking/ICommunication.o  ./src/config/ConfigEntry.o ./src/config/ConfigTranslator.o  ./src/common/Misc.o ./src/common/Tagged.o   -lm
+Finished building target: libcryomesh-common.so
+ 
 
 **** Build Finished ****
