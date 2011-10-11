@@ -26,7 +26,9 @@ class ActivityGrid {
 
 public:
 
+#ifdef CUTE_TEST
 	friend class ActivityGridTest;
+#endif
 	friend class BoundingBox;
 
 	typedef Coordinates<int> CoordinatesIntegers;

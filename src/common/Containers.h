@@ -54,7 +54,7 @@ public:
 				if (result < 0 && it_mapobj->first < val) {
 #ifdef CONTAINERS_DEBUG
 					std::cout << "Containers::deleteByComparison: " << "Deleting " << it_mapobj->first << " ( < "
-							<< val << ")" << std::endl;
+					<< val << ")" << std::endl;
 #endif
 					mapobj.erase(it_mapobj->first);
 				} else if (result == 0 && it_mapobj->first == val) {
@@ -101,7 +101,7 @@ public:
 	}
 	template<class T>
 	static boost::shared_ptr<T> deleteMapObjectByUUID(std::map<boost::uuids::uuid, boost::shared_ptr<T> > & mapobj,
-			const boost::uuids::uuid & id) {
+	const boost::uuids::uuid & id) {
 		boost::shared_ptr<T> temp_obj = common::Containers::getMutableByUUID<T>(mapobj, id);
 		if (temp_obj != 0) {
 			temp_obj->isolate();
@@ -115,7 +115,7 @@ public:
 
 	template<class T>
 	static const boost::shared_ptr<T> getByUUID(const std::map<boost::uuids::uuid, boost::shared_ptr<T> > & mapobj,
-			const boost::uuids::uuid id) {
+	const boost::uuids::uuid id) {
 		boost::shared_ptr<T> temp_obj;
 		typename std::map<boost::uuids::uuid, boost::shared_ptr<T> >::const_iterator it_found = mapobj.find(id);
 		const typename std::map<boost::uuids::uuid, boost::shared_ptr<T> >::const_iterator it_end = mapobj.end();
@@ -130,7 +130,7 @@ public:
 
 	template<class T>
 	static boost::shared_ptr<T> getMutableByUUID(std::map<boost::uuids::uuid, boost::shared_ptr<T> > & mapobj,
-			boost::uuids::uuid id) {
+	boost::uuids::uuid id) {
 		boost::shared_ptr<T> temp_obj;
 		typename std::map<boost::uuids::uuid, boost::shared_ptr<T> >::const_iterator it_found = mapobj.find(id);
 		const typename std::map<boost::uuids::uuid, boost::shared_ptr<T> >::const_iterator it_end = mapobj.end();
@@ -145,7 +145,7 @@ public:
 
 	template<class T>
 	static const boost::shared_ptr<T> getByID(const std::map<boost::uuids::uuid, boost::shared_ptr<T> > & mapobj,
-			int id) {
+	int id) {
 
 		boost::shared_ptr<T> temp_obj;
 
@@ -191,7 +191,7 @@ public:
 
 	template<class U, class T>
 	static void mapByUUID(const std::map<boost::shared_ptr<U>, boost::shared_ptr<T> > & creation_to_real,
-			std::map<boost::uuids::uuid, boost::uuids::uuid> & uuid_map) {
+	std::map<boost::uuids::uuid, boost::uuids::uuid> & uuid_map) {
 		// forall in new_chans
 		{
 			typename std::map<boost::shared_ptr<U>, boost::shared_ptr<T> >::const_iterator it_objs =
@@ -376,6 +376,24 @@ public:
 		return it_found;
 	}
 
+	template<class T>
+	static T getIntersection(const T & lhs, const T & rhs) {
+		T intersection;
+		// forall in lhs
+		{
+			typename T::iterator it_lhs = lhs.begin();
+			const typename T::const_iterator it_lhs_end = lhs.end();
+			const typename T::const_iterator it_rhs_end = rhs.end();
+			while (it_lhs != it_lhs_end) {
+				typename T::iterator it_found = rhs.find(*it_lhs);
+				if (it_found != rhs.end()) {
+					intersection.push_back(*it_lhs);
+				}
+				++it_lhs;
+			}
+		}
+		return intersection;
+	}
 protected:
 
 	/**
