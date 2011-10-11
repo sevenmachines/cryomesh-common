@@ -10,6 +10,9 @@
 
 #include <map>
 #include <list>
+#include <set>
+#include <boost/uuid/uuid.hpp>
+
 #include <boost/shared_ptr.hpp>
 namespace cryomesh {
 
@@ -96,6 +99,29 @@ public:
 			}
 		}
 	}
+	virtual void add(const std::set<boost::shared_ptr<T> > & list) {
+		// forall in list
+		{
+			typename std::set<boost::shared_ptr<T> >::const_iterator it_list = list.begin();
+			const typename std::set<boost::shared_ptr<T> >::const_iterator it_list_end = list.end();
+			while (it_list != it_list_end) {
+				objects[(*it_list)->getKey()] = *it_list;
+				++it_list;
+			}
+		}
+	}
+
+	virtual void add(const std::map<boost::uuids::uuid, boost::shared_ptr<T> > & list) {
+		// forall in list
+		{
+			typename std::map<boost::uuids::uuid, boost::shared_ptr<T> >::const_iterator it_list = list.begin();
+			const typename std::map<boost::uuids::uuid, boost::shared_ptr<T> >::const_iterator it_list_end = list.end();
+			while (it_list != it_list_end) {
+				objects[it_list->first] = it_list->second;
+				++it_list;
+			}
+		}
+	}
 
 	/**
 	 * Remove objects from collection by initialiser list
@@ -132,6 +158,33 @@ public:
 			}
 		}
 	}
+
+	virtual void remove(const std::set<boost::shared_ptr<T> > & list) {
+		// forall in list
+		{
+			typename std::set<boost::shared_ptr<T> >::const_iterator it_list = list.begin();
+			const typename std::set<boost::shared_ptr<T> >::const_iterator it_list_end = list.end();
+			while (it_list != it_list_end) {
+				this->remove((*it_list)->getKey());
+				++it_list;
+			}
+		}
+	}
+
+	virtual void remove(const std::map<boost::uuids::uuid, boost::shared_ptr<T> >  & list) {
+		// forall in list
+		{
+			typename std::map<boost::uuids::uuid, boost::shared_ptr<T> >::const_iterator it_list = list.begin();
+			const typename std::map<boost::uuids::uuid, boost::shared_ptr<T> >::const_iterator it_list_end = list.end();
+			while (it_list != it_list_end) {
+				this->remove(it_list->first);
+				++it_list;
+			}
+		}
+	}
+
+
+
 	// TODO Creating shared_ptr from reference causes deletion issues
 
 	/**
