@@ -377,15 +377,14 @@ public:
 	}
 
 	template<class T>
-	static T getIntersection(const T & lhs, const T & rhs) {
+	static T getIntersection(T & lhs, T & rhs) {
 		T intersection;
 		// forall in lhs
 		{
 			typename T::iterator it_lhs = lhs.begin();
 			const typename T::const_iterator it_lhs_end = lhs.end();
-			const typename T::const_iterator it_rhs_end = rhs.end();
 			while (it_lhs != it_lhs_end) {
-				typename T::iterator it_found = rhs.find(*it_lhs);
+				typename T::iterator it_found = std::find(rhs.begin(), rhs.end(), *it_lhs);
 				if (it_found != rhs.end()) {
 					intersection.push_back(*it_lhs);
 				}
@@ -393,6 +392,36 @@ public:
 			}
 		}
 		return intersection;
+	}
+
+	template<class T>
+	static T getDifference(T & lhs, T & rhs) {
+		T difference;
+		// forall in lhs
+		{
+			typename T::iterator it_lhs = lhs.begin();
+			const typename T::const_iterator it_lhs_end = lhs.end();
+			while (it_lhs != it_lhs_end) {
+				typename T::iterator it_found = std::find(rhs.begin(), rhs.end(), *it_lhs);
+				if (it_found == rhs.end()) {
+					difference.push_back(*it_lhs);
+				}
+				++it_lhs;
+			}
+		}
+		// forall in rhs
+		{
+			typename T::iterator it_rhs = rhs.begin();
+			const typename T::const_iterator it_rhs_end = rhs.end();
+			while (it_rhs != it_rhs_end) {
+				typename T::iterator it_found = std::find(lhs.begin(), lhs.end(), *it_rhs);
+				if (it_found == lhs.end()) {
+					difference.push_back(*it_rhs);
+				}
+				++it_rhs;
+			}
+		}
+		return difference;
 	}
 protected:
 
